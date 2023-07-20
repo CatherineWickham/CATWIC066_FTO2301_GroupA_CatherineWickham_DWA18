@@ -1,22 +1,29 @@
 <template>
-    <div class="audioContainer">
-        <audio controls @pause="getTimePlayed" @ended="handleEnded" src="https://podcast-api.netlify.app/placeholder-audio.mp3"></audio>
+    <v-sheet class="audioContainer">
+        <audio controls @loadstart="setTimePlayed" @pause="getTimePlayed" :src="currentlyPlaying.file"></audio>
         <div class="playingInfo">
-            <h3>Episode title</h3>
-            <h4>Show title</h4>
+            <h4>{{ currentlyPlaying.title }}</h4>
+            <h5>{{ currentlyPlaying.showTitle }}</h5>
         </div>
-    </div>
+    </v-sheet>
   </template>
 
 <script setup>
+import { storeToRefs } from 'pinia';
+import { useAppStore } from '@/store/app';
+
+const { currentlyPlaying } = storeToRefs(useAppStore())
+
+const startTime = currentlyPlaying.value.timePlayed
+
+const setTimePlayed = (event) => {
+    event.target.currentTime = startTime
+}
 
 const getTimePlayed = (event) => {
     const timePlayed = event.target.currentTime
-    console.log(timePlayed)
-}
-
-const handleEnded = () => {
-    console.log('ended')
+    currentlyPlaying.value.timePlayed = Math.floor(timePlayed)
+    console.log(currentlyPlaying.value)
 }
 
 </script>
@@ -28,7 +35,9 @@ const handleEnded = () => {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 3rem;
+    padding-top: 2rem;
+    padding-bottom: 0.8rem;
+    margin-top: 2rem;
 }
 
 audio {
@@ -37,13 +46,6 @@ audio {
 
 .playingInfo {
     text-align: center;
+    margin: 0.8rem;
 }
 </style>
-
-
-<!-- HTMLMediaElement.currentSrc  -->
-<!-- HTMLMediaElement.ended -->
-<!-- HTMLMediaElement.audioTracks -->
-<!-- Add and remove track event listeners -->
-
-<!-- Ending & changing view is the same as pausing -->

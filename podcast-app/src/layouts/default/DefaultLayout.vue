@@ -2,7 +2,7 @@
   <v-app>
     <default-bar />
     <default-view />
-    <default-footer style="border-top: 1px solid rgb(58, 58, 58);"/>
+    <default-footer/>
   </v-app>
 </template>
 
