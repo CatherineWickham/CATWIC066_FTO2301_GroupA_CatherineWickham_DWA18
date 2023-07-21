@@ -12,7 +12,8 @@
       :image="preview.image"
       :genres="preview.genres"
       :updated="preview.updated"
-    />
+    >
+    </PreviewCard>
   </v-container>
   <div v-else>Loading</div>
 </template>

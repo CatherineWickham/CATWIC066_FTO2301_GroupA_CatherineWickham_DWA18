@@ -15,6 +15,29 @@ const routes = [
     ],
   },
   {
+    path: "/season",
+    component: () => import("@/layouts/default/DefaultLayout.vue"),
+    children: [
+      {
+        path: "",
+        name: "Season",
+        component: () => import("@/views/SeasonView.vue"),
+      },
+    ],
+  },
+  {
+    path: "/show",
+    component: () => import("@/layouts/default/DefaultLayout.vue"),
+    children: [
+      {
+        path: "",
+        name: "Show",
+        component: () => import("@/views/ShowView.vue"),
+        meta: { requiresAuth: true },
+      },
+    ],
+  },
+  {
     path: "/favorites",
     component: () => import("@/layouts/default/DefaultLayout.vue"),
     children: [
@@ -50,7 +73,7 @@ const routes = [
   },
 ];
 
-const router = createRouter({
+export const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 });

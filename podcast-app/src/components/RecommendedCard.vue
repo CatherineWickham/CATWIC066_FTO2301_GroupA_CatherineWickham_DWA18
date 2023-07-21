@@ -1,28 +1,60 @@
 <template>
-    <v-card
-        width="400"
-        height="500"
+  <v-card
+      width="400"
+      height="500"
+      @click="showClickHandler"
+      @enter="showPlayButtonToggle"
+      @mouseleave="showPlayButtonToggle"
     >   
-        <v-card-title>{{ props.showData.title }}</v-card-title>
-        <v-chip>{{ props.showData.seasons }} SEASONS</v-chip>
-        <v-img
-        :src="props.showData.image"
-        width="100%"
-        cover
-        ></v-img>
-        
-    </v-card>
-      </template>
+      <v-card-title>{{ props.showData.title }}</v-card-title>
+      <v-chip>{{ props.showData.seasons }} SEASONS</v-chip>
+      <v-img
+      :src="props.showData.image"
+      width="100%"
+      cover
+      >
+        <router-link to="/show">
+            <v-btn 
+            v-show="showPlayButton"
+            class="playButton" 
+            density="default" 
+            icon="mdi-play" 
+            size="x-large"
+            ></v-btn>
+        </router-link>
+      </v-img>
+      
+  </v-card>
+</template>
     
-    <script setup>
-        const props = defineProps(['showData'])
-    </script>
-    
-    <style scoped>
-    .v-card {
-        text-align: center;
-    }
-    .v-chip {
-        margin-bottom: 0.5rem;
-    }
-    </style>
+<script setup>
+import { ref } from 'vue'
+
+let showPlayButton = ref(false)
+
+const showPlayButtonToggle = () => {
+  showPlayButton.value = !showPlayButton.value
+}
+
+const showClickHandler = () => {
+  console.log(props.showData.id)
+  // router.push('/show')
+}
+const props = defineProps(['showData'])
+
+</script>
+
+<style scoped>
+.v-card {
+    text-align: center;
+}
+.v-chip {
+    margin-bottom: 0.5rem;
+}
+.playButton{
+ position: relative;
+ top: 5%;
+ right: 35%;
+ z-index: 10;
+}
+</style>

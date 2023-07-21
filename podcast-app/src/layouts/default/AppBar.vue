@@ -7,6 +7,18 @@
     <nav>
       <div class="buttonWrapper">
         <v-btn variant="tonal" size="small" rounded="xl">
+          <router-link to="/season">Season View</router-link>
+        </v-btn>
+      </div>
+      
+      <div class="buttonWrapper">
+        <v-btn variant="tonal" size="small" rounded="xl">
+          <router-link to="/show">Show View</router-link>
+        </v-btn>
+      </div>
+
+      <div class="buttonWrapper">
+        <v-btn variant="tonal" size="small" rounded="xl">
           <router-link to="/login">Login</router-link>
         </v-btn>
       </div>

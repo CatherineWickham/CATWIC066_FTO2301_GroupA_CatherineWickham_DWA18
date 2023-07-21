@@ -2,13 +2,25 @@
     <v-card
       width="300"
       height="600"
-      @click="clickHandler"
+      @click="showClickHandler"
+      @mouseenter="showPlayButtonToggle"
+      @mouseleave="showPlayButtonToggle"
     >    
       <v-img
         :src="image"
         height="50%"
         cover
-      ></v-img>
+      >
+      <router-link to="/show">
+        <v-btn 
+          v-show="showPlayButton"
+          class="playButton" 
+          density="default" 
+          icon="mdi-play" 
+          size="x-large"
+        ></v-btn>
+      </router-link>
+      </v-img>
 
       <v-card-title>
         {{ title }}
@@ -30,6 +42,14 @@
 </template>
 
 <script setup>
+// import { router } from '../router/index'
+  import { ref } from 'vue'
+
+  let showPlayButton = ref(false)
+
+  const showPlayButtonToggle = () => {
+    showPlayButton.value = !showPlayButton.value
+  }
 
   const props = defineProps(['id', 'title', 'description', 'seasons', 'image', 'genres', 'updated'])
 
@@ -50,8 +70,9 @@
   const updatedMonth = (updated.getMonth() + 1).toString().padStart(2, '0')
   const updatedYear = updated.getFullYear()
 
-  const clickHandler = () => {
+  const showClickHandler = () => {
     console.log(props.id)
+    // router.push('/show')
   }
 
 </script>
@@ -74,5 +95,14 @@
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;  
   overflow: hidden;
+}
+.playButton{
+ position: relative;
+ top: 5%;
+ right: 35%;
+ z-index: 10;
+}
+.router-link{
+  position: absolute;
 }
 </style>
