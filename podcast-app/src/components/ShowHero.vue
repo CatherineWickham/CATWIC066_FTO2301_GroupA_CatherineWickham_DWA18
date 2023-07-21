@@ -1,27 +1,87 @@
-<template>    
-    <div class="heroContainer">
-      <v-img
-        src="https://content.production.cdn.art19.com/images/cc/e5/0a/08/cce50a08-d77d-490e-8c68-17725541b0ca/01f0b54164c3703a3cd38bb749621f6647b11f0cb9fe052fae358e01502283a80c02f8fd2258d448bdf37c1fbcfb8d0d1a23bf29201567e0413215c613cf7099.jpeg"
-        width="100%"
-        cover
-        ></v-img>   
+<template>
+<v-card
+    class="mx-auto"
+    max-width="500"
+  >
+    <v-img
+      :src="props.showData.image"
+      height="400"
+      cover
+    ></v-img>
+
+    <v-card-title>
+      {{ props.showData.title }}
+      <v-chip>
+      {{ props.showData.seasons.length }} SEASONS
+      </v-chip>
+    </v-card-title>
+
+    <div>
+        <v-divider></v-divider>
+
+        <v-card-text>
+          {{ props.showData.description }}
+        </v-card-text>
     </div>
-    
+
+    <div class="seasonToggleContainer">
+      <v-select
+        @change="handleSeasonSelect"
+        v-model="selectedSeason"
+        label="Select Season"
+        :items="selectArray"
+      ></v-select>
+
+      <!-- <v-btn
+        color="secondary"
+      >
+        Select Season
+
+        <v-menu activator="parent">
+          <v-list>
+            <v-list-item
+              v-for="(item, index) in props.showData.seasons"
+              :key="index"
+              :value="index"
+            >
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-btn> -->
+    </div>
+  </v-card>
 
 </template>
 
 <script setup>
-    //
+  import { reactive, ref } from 'vue'
+  const props = defineProps(['showData'])
+
+  let selectArray  = reactive(["All Seasons"])
+
+  props.showData.seasons.map((season)=> {
+    selectArray.push(`Season ${season.season}`)
+    return selectArray
+  })
+
+  let selectedSeason = ref("")
+
+  const handleSeasonSelect = () => {
+    console.log("hello")
+  }
+
 </script>
 
-<style>
-    .heroContainer {
-      width: 100%;
-      height: 30vh;
-      display: flex;
-    }
-
+<style scoped>
+.v-chip {
+  margin-left: 1rem;
+}
+.seasonToggleContainer {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  padding-bottom: 1.5rem;
+}
 </style>
-
-
 

@@ -19,5 +19,6 @@ export const useAppStore = defineStore("app", () => {
     file: trialShowData.seasons[0].episodes[0].file,
     timePlayed: 0,
   });
-  return { currentlyPlaying };
+  const currentShowId = ref(null);
+  return { currentlyPlaying, currentShowId };
 });

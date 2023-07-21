@@ -29,6 +29,10 @@
     
 <script setup>
 import { ref } from 'vue'
+import { storeToRefs } from 'pinia';
+import { useAppStore } from '@/store/app';
+
+const props = defineProps(['showData'])
 
 let showPlayButton = ref(false)
 
@@ -36,11 +40,13 @@ const showPlayButtonToggle = () => {
   showPlayButton.value = !showPlayButton.value
 }
 
+const { currentShowId } = storeToRefs(useAppStore())
+
 const showClickHandler = () => {
   console.log(props.showData.id)
-  // router.push('/show')
+  currentShowId.value = props.showData.id
+  console.log(currentShowId.value)
 }
-const props = defineProps(['showData'])
 
 </script>
 

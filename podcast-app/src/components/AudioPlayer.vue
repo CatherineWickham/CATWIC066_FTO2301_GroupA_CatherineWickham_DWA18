@@ -38,6 +38,9 @@ const getTimePlayed = (event) => {
     padding-top: 2rem;
     padding-bottom: 0.8rem;
     margin-top: 2rem;
+    /* position:fixed;
+    bottom: 0px;
+    border-top: solid 1px rgb(66, 66, 66); */
 }
 
 audio {

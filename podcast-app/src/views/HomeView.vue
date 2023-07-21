@@ -21,8 +21,7 @@
 <script setup>
   import PreviewCard from '@/components/PreviewCard.vue'
   import RecommendedCarousel from '@/components/RecommendedCarousel.vue';
-  import { reactive } from 'vue';
-  import { ref } from 'vue'
+  import { reactive, ref } from 'vue';
 
   const getRecommended = (previews) => {
     const recommended = []
@@ -36,7 +35,7 @@
   let previewData = reactive([])
   let recommendedArray = reactive([])
 
-  const getPreviewData = async () => {
+  const fetchPreviewData = async () => {
   try {
     const res = await fetch("https://podcast-api.netlify.app/shows");
     previewData = await res.json();
@@ -47,7 +46,7 @@
     console.error(error);
   }
   };
-  getPreviewData()
+  fetchPreviewData()
 
 </script>
 

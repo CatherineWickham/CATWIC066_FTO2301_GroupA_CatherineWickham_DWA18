@@ -44,12 +44,8 @@
 <script setup>
 // import { router } from '../router/index'
   import { ref } from 'vue'
-
-  let showPlayButton = ref(false)
-
-  const showPlayButtonToggle = () => {
-    showPlayButton.value = !showPlayButton.value
-  }
+  import { storeToRefs } from 'pinia';
+  import { useAppStore } from '@/store/app';
 
   const props = defineProps(['id', 'title', 'description', 'seasons', 'image', 'genres', 'updated'])
 
@@ -70,9 +66,18 @@
   const updatedMonth = (updated.getMonth() + 1).toString().padStart(2, '0')
   const updatedYear = updated.getFullYear()
 
+  let showPlayButton = ref(false)
+
+  const showPlayButtonToggle = () => {
+    showPlayButton.value = !showPlayButton.value
+  }
+  
+  const { currentShowId } = storeToRefs(useAppStore())
+
   const showClickHandler = () => {
     console.log(props.id)
-    // router.push('/show')
+    currentShowId.value = props.id
+    console.log(currentShowId.value)
   }
 
 </script>

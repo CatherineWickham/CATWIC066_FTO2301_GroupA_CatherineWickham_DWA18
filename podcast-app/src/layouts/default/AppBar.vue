@@ -5,11 +5,6 @@
       Poddle
     </v-app-bar-title>
     <nav>
-      <div class="buttonWrapper">
-        <v-btn variant="tonal" size="small" rounded="xl">
-          <router-link to="/season">Season View</router-link>
-        </v-btn>
-      </div>
       
       <div class="buttonWrapper">
         <v-btn variant="tonal" size="small" rounded="xl">
