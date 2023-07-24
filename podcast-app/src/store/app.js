@@ -1,32 +1,29 @@
 // Utilities
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { trialShowData } from "../trial-data/trial-show";
-
-// export const useAppStore = defineStore('app', {
-//   state: () => ({
-//     //
-//   }),
-// })
+// import { trialShowData } from "../trial-data/trial-show";
 
 export const useAppStore = defineStore("app", () => {
   const currentlyPlaying = ref({
-    showId: trialShowData.id,
-    showTitle: trialShowData.title,
-    title: trialShowData.seasons[0].episodes[0].title,
-    description: trialShowData.seasons[0].episodes[0].description,
-    episode: trialShowData.seasons[0].episodes[0].episode,
-    file: trialShowData.seasons[0].episodes[0].file,
+    showId: null,
+    showTitle: null,
+    episodeTitle: null,
+    episode: null,
+    file: null,
     timePlayed: 0,
   });
+
+  const listenHistory = ref([]);
+
   const currentShowId = ref(null);
-  const userActivity = {
-    user_email: "catherine@poop.com",
+
+  const userActivity = ref({
+    user_email: "catherine@fake.com",
     podcast_id: 123,
     season: 3,
     episode: 1,
-    timestamp: 12345,
-  };
+    time_stamp: 12345,
+  });
 
-  return { currentlyPlaying, currentShowId, userActivity };
+  return { currentlyPlaying, listenHistory, currentShowId, userActivity };
 });

@@ -36,7 +36,8 @@ v-for="season in seasonsArray"
               size="large"
               color="green"
               @click="episodeSelectedHandler"
-              :data-episode="season.season + '*' + episode.episode"
+              :data-episode="[episode.episode]"
+              :data-season="[season.season]"
               ></v-btn>
             </div>
           </div>
@@ -50,25 +51,28 @@ v-for="season in seasonsArray"
 
 <script setup>
   import { reactive } from 'vue'
+  import { storeToRefs } from 'pinia';
+  import { useAppStore } from '@/store/app';
+
   const props = defineProps(['showData'])
   const seasonsArray = reactive(props.showData.seasons)
 
+  const { currentlyPlaying } = storeToRefs(useAppStore())
+
   const episodeSelectedHandler = (event) => {
-    const episodeDataAttribute = 'data-episode';
-      let currentElement = event.target;
+    
 
-      // Traverse up the DOM tree to find the closest parent with the data-episode attribute
-      while (currentElement) {
-        if (currentElement.hasAttribute(episodeDataAttribute)) {
-          const dataEpisode = currentElement.getAttribute(episodeDataAttribute);
-          console.log('data-episode:', dataEpisode);
+    const currentEpisode = event.target.closest('[data-episode]').dataset.episode
+    const currentSeason = event.target.closest('[data-season]').dataset.season
 
-          // Now you can use the dataEpisode variable for further processing
-          break;
-        }
-        currentElement = currentElement.parentElement;
-      }
-    // console.log(event.target.getAttribute('data-episode'))
+    currentlyPlaying.value.showId = props.showData.id
+    currentlyPlaying.value.showTitle = props.showData.title
+    currentlyPlaying.value.episodeTitle = props.showData.seasons[currentSeason-1].episodes[currentEpisode-1].title
+    currentlyPlaying.value.episode = currentEpisode
+    currentlyPlaying.value.file = props.showData.seasons[currentSeason-1].episodes[currentEpisode-1].file
+    currentlyPlaying.value.timePlayed = props.showData.seasons[currentSeason-1].episodes[currentEpisode-1].timePlayed || 0
+
+    return currentlyPlaying.value
   }
 
 </script>
