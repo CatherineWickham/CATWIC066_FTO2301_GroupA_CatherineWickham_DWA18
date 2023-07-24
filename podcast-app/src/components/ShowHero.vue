@@ -26,7 +26,7 @@
 
     <div class="seasonToggleContainer">
       <v-select
-        @change="handleSeasonSelect"
+        @update:menu="handleSeasonSelect"
         v-model="selectedSeason"
         label="Select Season"
         :items="selectArray"
@@ -68,7 +68,7 @@
   let selectedSeason = ref("")
 
   const handleSeasonSelect = () => {
-    console.log("hello")
+    console.log(selectedSeason.value)
   }
 
 </script>

@@ -25,10 +25,10 @@
   const fetchShowData = async () => {
   try {
     if (currentShowId.value) {
-      const res = await fetch(`https://podcast-api.netlify.app/id/${currentShowId.value}`);
+      const URL = `https://podcast-api.netlify.app/id/${currentShowId.value}`;
+      const res = await fetch(URL);
       showData = await res.json();
       showDataReady.value = true
-      console.log(showData)
       return { showData };
     }
     return

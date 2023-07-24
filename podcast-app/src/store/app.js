@@ -20,5 +20,13 @@ export const useAppStore = defineStore("app", () => {
     timePlayed: 0,
   });
   const currentShowId = ref(null);
-  return { currentlyPlaying, currentShowId };
+  const userActivity = {
+    user_email: "catherine@poop.com",
+    podcast_id: 123,
+    season: 3,
+    episode: 1,
+    timestamp: 12345,
+  };
+
+  return { currentlyPlaying, currentShowId, userActivity };
 });

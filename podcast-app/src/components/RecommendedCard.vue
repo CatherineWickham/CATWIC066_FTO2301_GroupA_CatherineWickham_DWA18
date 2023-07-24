@@ -43,9 +43,7 @@ const showPlayButtonToggle = () => {
 const { currentShowId } = storeToRefs(useAppStore())
 
 const showClickHandler = () => {
-  console.log(props.showData.id)
   currentShowId.value = props.showData.id
-  console.log(currentShowId.value)
 }
 
 </script>

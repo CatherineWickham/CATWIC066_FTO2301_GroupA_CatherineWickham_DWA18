@@ -75,9 +75,7 @@
   const { currentShowId } = storeToRefs(useAppStore())
 
   const showClickHandler = () => {
-    console.log(props.id)
     currentShowId.value = props.id
-    console.log(currentShowId.value)
   }
 
 </script>
