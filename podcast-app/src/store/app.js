@@ -13,6 +13,17 @@ export const useAppStore = defineStore("app", () => {
     timePlayed: 0,
   });
 
+  const favorites = ref([
+    {
+      showId: "10716",
+      showTitle: "Something Was Wrong",
+      season: 1,
+      episode: 1,
+      episodeTitle: "There Were No Red Flags",
+      file: "https://podcast-api.netlify.app/placeholder-audio.mp3",
+    },
+  ]);
+
   const listenHistory = ref([]);
 
   const currentShowId = ref(null);

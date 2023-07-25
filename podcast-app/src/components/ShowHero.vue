@@ -1,75 +1,46 @@
 <template>
-<v-card
-    class="mx-auto"
-    max-width="500"
-  >
-    <v-img
-      :src="props.showData.image"
-      height="400"
-      cover
-    ></v-img>
+  <v-card class="mx-auto" max-width="500">
+    <v-img :src="props.showData.image" height="400" cover></v-img>
 
     <v-card-title>
       {{ props.showData.title }}
       <v-chip>
-      {{ props.showData.seasons.length }} SEASONS
+        {{ props.showData.seasons.length }} SEASONS
       </v-chip>
     </v-card-title>
 
     <div>
-        <v-divider></v-divider>
+      <v-divider></v-divider>
 
-        <v-card-text>
-          {{ props.showData.description }}
-        </v-card-text>
+      <v-card-text>
+        {{ props.showData.description }}
+      </v-card-text>
     </div>
 
     <div class="seasonToggleContainer">
-      <v-select
-        @update:menu="handleSeasonSelect"
-        v-model="selectedSeason"
-        label="Select Season"
-        :items="selectArray"
-      ></v-select>
+      <v-select @update:menu="handleSeasonSelect" v-model="selectedSeason" label="Select Season"
+        :items="selectArray"></v-select>
 
-      <!-- <v-btn
-        color="secondary"
-      >
-        Select Season
-
-        <v-menu activator="parent">
-          <v-list>
-            <v-list-item
-              v-for="(item, index) in props.showData.seasons"
-              :key="index"
-              :value="index"
-            >
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </v-btn> -->
     </div>
   </v-card>
-
 </template>
 
 <script setup>
-  import { reactive, ref } from 'vue'
-  const props = defineProps(['showData'])
+import { reactive, ref } from 'vue'
+const props = defineProps(['showData'])
 
-  let selectArray  = reactive(["All Seasons"])
+let selectArray = reactive(["All Seasons"])
 
-  props.showData.seasons.map((season)=> {
-    selectArray.push(`Season ${season.season}`)
-    return selectArray
-  })
+props.showData.seasons.map((season) => {
+  selectArray.push(`Season ${season.season}`)
+  return selectArray
+})
 
-  let selectedSeason = ref("")
+let selectedSeason = ref("")
 
-  const handleSeasonSelect = () => {
-    console.log(selectedSeason.value)
-  }
+const handleSeasonSelect = () => {
+  console.log(selectedSeason.value)
+}
 
 </script>
 
@@ -77,6 +48,7 @@
 .v-chip {
   margin-left: 1rem;
 }
+
 .seasonToggleContainer {
   display: flex;
   justify-content: center;

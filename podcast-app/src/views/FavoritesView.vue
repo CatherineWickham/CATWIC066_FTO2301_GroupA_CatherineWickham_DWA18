@@ -1,13 +1,12 @@
 <template>
   <h1>Favorites Page</h1>
-  <PreviewCards />
 </template>
 
 <script setup>
-  import PreviewCards from '@/components/PreviewCards.vue'
-
 
 </script>
+
+<!-- How to get account data from current user - email in this example -->
 
 <!-- import { supabase } from '@/clients/supabase';
 import { ref } from 'vue'
