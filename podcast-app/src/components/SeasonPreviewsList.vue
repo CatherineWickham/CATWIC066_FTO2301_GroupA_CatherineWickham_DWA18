@@ -9,8 +9,9 @@
     <v-list max-width>
       <v-list-item v-for="episode in season.episodes" :key="episode.episode">
         <v-list-item-title>
-          <v-icon @click="toggleFavorite(season, episode)" v-if="episode.isFavorite" icon='mdi-heart' />
-          <v-icon @click="toggleFavorite(season, episode)" v-else icon='mdi-heart-outline' />
+          <v-icon @click="toggleFavorite(season, episode)" v-if="episode.isFavorite" icon='mdi-heart'
+            :key="filledHeartKey" />
+          <v-icon @click="toggleFavorite(season, episode)" v-else icon='mdi-heart-outline' :key="emptyHeartKey" />
           <v-chip class="episodeChip">EPISODE {{ episode.episode }}</v-chip>
           {{ episode.title }}
         </v-list-item-title>
@@ -37,6 +38,9 @@ import { useAppStore } from '@/store/app';
 import { supabase } from '@/clients/supabase';
 
 const props = defineProps(['showData'])
+
+let filledHeartKey = ref(0)
+let emptyHeartKey = ref(1)
 
 // const seasonsArray = reactive(props.showData.seasons)
 
@@ -74,6 +78,8 @@ const toggleFavorite = async (season, episode) => {
 
     // Update the isFavorite property in the episode object
     episode.isFavorite = !episode.isFavorite;
+    filledHeartKey.value++
+    emptyHeartKey.value++
   } catch (error) {
     console.error('Error toggling favorite:', error);
   }

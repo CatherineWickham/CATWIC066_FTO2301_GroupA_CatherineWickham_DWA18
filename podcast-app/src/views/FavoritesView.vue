@@ -1,6 +1,8 @@
 <template>
-  <v-container v-if="favoritesDataReady">
+  <v-container fluid class="fill-height" v-if="favoritesDataReady">
+    <FilterToolbar @sortTypeSelected="handleSortTypeSelect" />
     <FavoritesList :favoritesData="favoritesData"></FavoritesList>
+    <div class="bottomSpacer"></div>
   </v-container>
   <div v-else>Loading</div>
 </template>
@@ -8,7 +10,12 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import FavoritesList from '@/components/FavoritesList.vue'
+import FilterToolbar from '@/components/FilterToolbar.vue'
 import { supabase } from '@/clients/supabase';
+
+const handleSortTypeSelect = (event) => {
+  console.log(event.detail)
+}
 
 // import { trialShowData } from '../trial-data/trial-show'
 // const showData = reactive(trialShowData)
@@ -52,5 +59,9 @@ fetchFavoritesData()
 <style scoped>
 .v-container {
   justify-content: center;
+}
+
+.bottomSpacer {
+  height: 20vh;
 }
 </style>
