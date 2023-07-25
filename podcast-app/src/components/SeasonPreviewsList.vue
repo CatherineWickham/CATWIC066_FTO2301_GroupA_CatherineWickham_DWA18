@@ -6,15 +6,15 @@
       <v-chip>{{ season.episodes.length }} EPISODES</v-chip>
     </div>
 
-    <v-expansion-panels variant="accordion" max-width>
-      <v-expansion-panel v-for="episode in season.episodes" :key="episode.episode">
-        <v-expansion-panel-title>
+    <v-list max-width>
+      <v-list-item v-for="episode in season.episodes" :key="episode.episode">
+        <v-list-item-title>
           <v-icon v-if="episode.isFavorite" icon='mdi-heart' />
           <v-icon v-else icon='mdi-heart-outline' />
           <v-chip class="episodeChip">EPISODE {{ episode.episode }}</v-chip>
           {{ episode.title }}
-        </v-expansion-panel-title>
-        <v-expansion-panel-text>
+        </v-list-item-title>
+        <v-list-item-subtitle>
           <div class="episodePanel">
             <div>
               {{ episode.description }}
@@ -24,9 +24,9 @@
                 :data-episode="[episode.episode]" :data-season="[season.season]"></v-btn>
             </div>
           </div>
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-    </v-expansion-panels>
+        </v-list-item-subtitle>
+      </v-list-item>
+    </v-list>
   </v-card>
 </template>
 
