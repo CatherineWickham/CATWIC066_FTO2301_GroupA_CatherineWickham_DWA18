@@ -9,8 +9,8 @@
     <v-list max-width>
       <v-list-item v-for="episode in season.episodes" :key="episode.episode">
         <v-list-item-title>
-          <v-icon v-if="episode.isFavorite" icon='mdi-heart' />
-          <v-icon v-else icon='mdi-heart-outline' />
+          <v-icon @click="toggleFavorite(season, episode)" v-if="episode.isFavorite" icon='mdi-heart' />
+          <v-icon @click="toggleFavorite(season, episode)" v-else icon='mdi-heart-outline' />
           <v-chip class="episodeChip">EPISODE {{ episode.episode }}</v-chip>
           {{ episode.title }}
         </v-list-item-title>
@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { storeToRefs } from 'pinia';
 import { useAppStore } from '@/store/app';
 import { supabase } from '@/clients/supabase';
@@ -42,21 +42,42 @@ const props = defineProps(['showData'])
 
 const { currentlyPlaying } = storeToRefs(useAppStore())
 
-// const isFavorite = async (showId, season, episode) => {
-//   let { data: data, error } = await supabase
-//     .from('favorites')
-//     .select('*')
-//     .eq('showId', showId)
-//     .eq('season', season)
-//     .eq('episode', episode)
-//   // console.log(error)
-//   if (data.length > 0) {
-//     console.log(data)
-//     return true
-//   } else {
-//     return false
-//   }
-// }
+const toggleFavorite = async (season, episode) => {
+  try {
+    // Check if the episode is already favorited
+    if (episode.isFavorite) {
+      // If it's favorited, remove it from the database
+      await supabase
+        .from('favorites')
+        .delete()
+        .eq('showId', props.showData.id)
+        .eq('season', season.season)
+        .eq('episode', episode.episode);
+      console.log("Removed fav")
+    } else {
+      // If it's not favorited, add it to the database
+      await supabase.from('favorites')
+        .insert({
+          user_email: 'cathhwickham@gmail.com',
+          showId: props.showData.id,
+          show_name: props.showData.title,
+          season: season.season,
+          date_added: new Date(),
+          last_updated: props.showData.updated,
+          episode: episode.episode,
+          episode_title: episode.title,
+          episode_description: episode.description,
+          season_image: season.image,
+        });
+      console.log("Added fav")
+    }
+
+    // Update the isFavorite property in the episode object
+    episode.isFavorite = !episode.isFavorite;
+  } catch (error) {
+    console.error('Error toggling favorite:', error);
+  }
+};
 
 const episodeSelectedHandler = (event) => {
 

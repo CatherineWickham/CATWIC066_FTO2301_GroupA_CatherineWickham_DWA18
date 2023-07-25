@@ -20,7 +20,7 @@ let favoritesData = reactive([])
 const fetchFavoritesData = async () => {
   try {
     let favoritesInfo = []
-    let { data, error } = await supabase
+    let { data } = await supabase
       .from('favorites')
       .select('*')
     for (const item of data) {

@@ -1,7 +1,7 @@
 <template>
   <v-card width="100%" class="favContainer" v-for="favorite in props.favoritesData" :key="favorite.id">
     <div class="favImage">
-      <v-img :src="favorite.image" height="100%" cover></v-img>
+      <v-img :src="favorite.image" width="200" cover></v-img>
     </div>
     <div class="favInfo">
       <v-card-title>
@@ -16,8 +16,6 @@
 </template>
 
 <script setup>
-import { storeToRefs } from 'pinia';
-import { useAppStore } from '@/store/app';
 
 const props = defineProps(['favoritesData'])
 
