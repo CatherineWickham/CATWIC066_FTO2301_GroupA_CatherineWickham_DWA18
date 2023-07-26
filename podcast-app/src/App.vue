@@ -6,7 +6,9 @@
 import { storeToRefs } from 'pinia';
 import { useAppStore } from '@/store/app';
 import { supabase } from "@/clients/supabase";
-import { onMounted, onBeforeUnmount } from 'vue'
+import { onMounted } from 'vue'
+
+window.addEventListener("beforeunload", uploadLastPlayed)
 
 const { currentlyPlaying } = storeToRefs(useAppStore())
 
@@ -74,9 +76,9 @@ onMounted(() => {
   fetchLastPlayed()
 })
 
-onBeforeUnmount(() => {
-  uploadLastPlayed()
-  alert(`the component is being unmounted`)
-})
+// onBeforeUnmount(() => {
+//   uploadLastPlayed()
+//   alert(`the component is being unmounted`)
+// })
 
 </script>
