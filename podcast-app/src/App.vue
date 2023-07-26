@@ -57,7 +57,7 @@ async function fetchLastPlayed() {
       lastPlayed.season = data[0].season
       lastPlayed.file = data[0].file
       lastPlayed.timePlayed = data[0].time_played
-      console.log('Data fetched successfully:', data)
+      // console.log('Data fetched successfully:', data)
     } else if (error) {
       console.error('Error fetching data:', error.message);
       return
@@ -72,7 +72,7 @@ async function fetchLastPlayed() {
 }
 
 onMounted(() => {
-  console.log(`the component is now mounted.`)
+  // console.log(`the component is now mounted.`)
   fetchLastPlayed()
 })
 
