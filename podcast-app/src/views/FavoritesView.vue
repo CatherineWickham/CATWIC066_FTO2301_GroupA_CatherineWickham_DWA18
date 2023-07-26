@@ -26,12 +26,13 @@ let favoritesData = reactive([])
 
 const fetchFavoritesData = async () => {
   try {
-    let favoritesInfo = []
+    let favoritesArray = []
     let { data } = await supabase
       .from('favorites')
       .select('*')
+      .eq('is_favorite', true)
     for (const item of data) {
-      favoritesInfo.push({
+      favoritesArray.push({
         id: item.id,
         showId: item.showId,
         showTitle: item.show_name,
@@ -45,7 +46,7 @@ const fetchFavoritesData = async () => {
         isFavorite: true,
       })
     }
-    favoritesData = favoritesInfo
+    favoritesData = favoritesArray
     favoritesDataReady.value = true
   } catch (error) {
     console.error(error);

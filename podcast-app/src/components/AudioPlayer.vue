@@ -1,6 +1,6 @@
 <template>
   <v-sheet class="audioContainer">
-    <audio controls @loadstart="setTimePlayed" @pause="getTimePlayed" :src="currentlyPlaying.file">
+    <audio controls @loadstart="setTimePlayed" @pause="getTimePlayed" :src="currentlyPlaying.file" :key="audioKey">
     </audio>
     <div class="playingInfo">
       <h4>{{ currentlyPlaying.episodeTitle }}</h4>
@@ -12,21 +12,29 @@
 <script setup>
 import { storeToRefs } from 'pinia';
 import { useAppStore } from '@/store/app';
+import { supabase } from '@/clients/supabase';
 
 const { currentlyPlaying } = storeToRefs(useAppStore())
-// let { file, episodeTitle, showTitle } = currentlyPlaying.value NO DESTRUCTURING!
 
-const startTime = currentlyPlaying.value.timePlayed
+// const startTime = currentlyPlaying.value.timePlayed
+
+let audioKey = 0
 
 const setTimePlayed = (event) => {
-  event.target.currentTime = startTime
+  event.target.currentTime = currentlyPlaying.value.timePlayed
+  audioKey++
 }
 
-const getTimePlayed = (event) => {
+const getTimePlayed = async (event) => {
   const timePlayed = event.target.currentTime
   currentlyPlaying.value.timePlayed = Math.floor(timePlayed)
-  // listenHistory.value.push(currentlyPlaying.value)
-  // console.log(listenHistory.value)
+  console.log(currentlyPlaying.value)
+  await supabase
+    .from('favorites')
+    .update({ time_played: currentlyPlaying.value.timePlayed })
+    .eq('showId', currentlyPlaying.value.showId)
+    .eq('season', currentlyPlaying.value.season)
+    .eq('episode', currentlyPlaying.value.episode);
 }
 
 </script>

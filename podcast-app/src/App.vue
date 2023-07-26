@@ -1,80 +1,82 @@
 <template>
-  <router-view/>
+  <router-view />
 </template>
 
 <script setup>
-  import { storeToRefs } from 'pinia';
-  import { useAppStore } from '@/store/app';
-  import { supabase } from "@/clients/supabase";
-  import { onMounted, onBeforeUnmount } from 'vue'
+import { storeToRefs } from 'pinia';
+import { useAppStore } from '@/store/app';
+import { supabase } from "@/clients/supabase";
+import { onMounted, onBeforeUnmount } from 'vue'
 
-  const { userActivity } = storeToRefs(useAppStore())
+const { currentlyPlaying } = storeToRefs(useAppStore())
 
-  async function insertData( userActivity ) {
-    const { user_email, podcast_id, season, episode, time_stamp } = userActivity._value
-      try {
-        const { data, error } = await supabase
-          .from('user_activity') 
-          .insert([{
-            user_email: user_email,
-            podcast_id: podcast_id,
-            season: season,
-            episode: episode,
-            time_stamp: time_stamp,
-          }]);
-        
-        if (error) {
-          console.error('Error inserting data:', error.message);
-        } else {
-          console.log('Data inserted successfully:', data);
-        }
-      } catch (error) {
-        console.error('Error inserting data:', error.message);
-      }
+async function uploadLastPlayed() {
+  const localUser = await supabase.auth.getSession()
+  const lastPlayed = currentlyPlaying.value
+  try {
+    const { data, error } = await supabase
+      .from('last_played_tracks')
+      .insert({
+        user_email: localUser.data.session.user.email,
+        time_added: new Date(),
+        showId: lastPlayed.showId,
+        show_title: lastPlayed.showTitle,
+        episode_title: lastPlayed.episodeTitle,
+        episode: lastPlayed.episode,
+        season: lastPlayed.season,
+        file: lastPlayed.file,
+        time_played: lastPlayed.timePlayed,
+      });
+    if (error) {
+      console.error('Error inserting data:', error.message);
+    } else {
+      console.log('Data inserted successfully:', data);
     }
+  } catch (error) {
+    console.error('Error inserting data:', error.message);
+  }
+}
 
-  onMounted(() => {
-    console.log(`the component is now mounted.`)
-  })
+async function fetchLastPlayed() {
+  const localUser = await supabase.auth.getSession()
+  const lastPlayed = currentlyPlaying.value
+  try {
+    const { data, error } = await supabase
+      .from('last_played_tracks')
+      .select('*')
+      .eq('user_email', localUser.data.session.user.email)
+      .order('time_added', { ascending: false })
+      .limit(1)
+    if (data.length > 0) {
+      lastPlayed.showId = data[0].showId
+      lastPlayed.showTitle = data[0].show_title
+      lastPlayed.episodeTitle = data[0].episode_title
+      lastPlayed.episode = data[0].episode
+      lastPlayed.season = data[0].season
+      lastPlayed.file = data[0].file
+      lastPlayed.timePlayed = data[0].time_played
+      console.log('Data fetched successfully:', data)
+    } else if (error) {
+      console.error('Error fetching data:', error.message);
+      return
+    }
+    else {
+      console.log('No data for played tracks')
+      return
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error.message);
+  }
+}
 
-  onBeforeUnmount(() => {
-      alert(`the component is being unmounted`)
-      insertData(userActivity)
-  })
+onMounted(() => {
+  console.log(`the component is now mounted.`)
+  fetchLastPlayed()
+})
 
+onBeforeUnmount(() => {
+  uploadLastPlayed()
+  alert(`the component is being unmounted`)
+})
 
 </script>
-
-<!-- 
-// Get everything from the notes table
-let { data: notes, error } = await supabase
-    .from('notes')
-    .select('*')
-
-// Just return the date and note columns of every note 
-let { data: notes, error } = await supabase
-    .from('notes')
-    .select('date, note') -->
-
-    <!-- We can use eq() to find a record which matches a value:
-
-    let id = "some_id_we_are_curious_about";
-    let { data: notes, error } = await supabase
-    .from('notes')
-    .select('date, note')
-    .eq('id', id) 
-  -->
-
-
-    <!-- 
-    .eq('column', 'Equal to')
-    .gt('column', 'Greater than')
-    .lt('column', 'Less than')
-    .gte('column', 'Greater than or equal to')
-    .lte('column', 'Less than or equal to')
-    .like('column', '%CaseSensitive%')
-    .ilike('column', '%CaseInsensitive%')
-    .is('column', null)
-    .in('column', ['Array', 'Values'])
-    .neq('column', 'Not equal to') 
-  -->

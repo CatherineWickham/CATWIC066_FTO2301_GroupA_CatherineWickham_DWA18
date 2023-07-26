@@ -11,7 +11,7 @@
         <v-card-subtitle>{{ favorite.showTitle + ' - Season ' + favorite.season }}</v-card-subtitle>
         <v-card-text>{{ favorite.episodeDescription }}</v-card-text>
         <v-btn icon="mdi-play" size="large" color="green" @click="episodeSelectedHandler" :data-key="favorite.id"></v-btn>
-        <v-btn icon='mdi-heart-outline' variant="tonal" size="large" @click="removeFavorite(favorite)"
+        <v-btn icon='mdi-close' variant="tonal" size="large" @click="removeFavorite(favorite)"
           :data-key="favorite.id"></v-btn>
       </div>
     </div>
