@@ -43,6 +43,8 @@ const fetchFavoritesData = async () => {
         episodeTitle: item.episode_title,
         episodeDescription: item.episode_description,
         image: item.season_image,
+        timePlayed: item.time_played,
+        file: item.file,
         isFavorite: true,
       })
     }

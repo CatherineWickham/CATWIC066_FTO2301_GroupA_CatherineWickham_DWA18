@@ -26,6 +26,7 @@
             </div>
           </div>
         </v-list-item-subtitle>
+        <v-divider></v-divider>
       </v-list-item>
     </v-list>
   </v-card>
@@ -63,7 +64,7 @@ const toggleFavorite = async (season, episode) => {
         .eq('showId', props.showData.id)
         .eq('season', season.season)
         .eq('episode', episode.episode);
-      console.log("Updated existing fav in database")
+      // console.log("Updated existing fav in database")
     } else {
       // if not in DB, add as a new favorite
       const localUser = await supabase.auth.getSession()
@@ -83,7 +84,7 @@ const toggleFavorite = async (season, episode) => {
           is_favorite: true,
           time_played: episode.timePlayed || 0,
         });
-      console.log("Added new fav to DB")
+      // console.log("Added new fav to DB")
     }
 
     // Update the isFavorite property in the episode object
@@ -108,7 +109,7 @@ const episodeSelectedHandler = async (season, episode) => {
       .eq('episode', episode.episode)
     if (data.length > 0) {
       time = data[0].time_played
-      console.log("Episode already in database")
+      // console.log("Episode already in database")
     } else {
       // If it's not already in database, add it with time = 0
       await supabase.from('favorites')
@@ -127,7 +128,7 @@ const episodeSelectedHandler = async (season, episode) => {
           is_favorite: episode.isFavorite || false,
           time_played: 0,
         });
-      console.log("Episode added to database")
+      // console.log("Episode added to database")
     }
 
     // Update the the currently playing value in the store
@@ -138,40 +139,11 @@ const episodeSelectedHandler = async (season, episode) => {
     currentlyPlaying.value.season = season.season
     currentlyPlaying.value.file = episode.file
     currentlyPlaying.value.timePlayed = time // If is data, gets set from DB, otherwise is 0
-
-    // currentlyPlaying.value.userEmail = localUser.data.session.user.email
-    // currentlyPlaying.value.showId = props.showData.id
-    // currentlyPlaying.value.showTitle =
-    // currentlyPlaying.value.season =
-    // currentlyPlaying.value.dateAdded =
-    // currentlyPlaying.value.dateUpdated =
-    // currentlyPlaying.value.episode =
-    // currentlyPlaying.value.episodeTitle =
-    // currentlyPlaying.value.episodeDescription =
-    // currentlyPlaying.value.seasonImage =
-    // currentlyPlaying.value.timePlayed =
-
   }
   catch (error) {
     console.error('Error adding listening history / loading currently playing:', error);
   }
 };
-
-
-// const episodeSelectedHandler = (event) => {
-
-//   const currentEpisode = event.target.closest('[data-episode]').dataset.episode
-//   const currentSeason = event.target.closest('[data-season]').dataset.season
-
-//   currentlyPlaying.value.showId = props.showData.id
-//   currentlyPlaying.value.showTitle = props.showData.title
-//   currentlyPlaying.value.episodeTitle = props.showData.seasons[currentSeason - 1].episodes[currentEpisode - 1].title
-//   currentlyPlaying.value.episode = currentEpisode
-//   currentlyPlaying.value.file = props.showData.seasons[currentSeason - 1].episodes[currentEpisode - 1].file
-//   currentlyPlaying.value.timePlayed = props.showData.seasons[currentSeason - 1].episodes[currentEpisode - 1].timePlayed || 0
-
-//   return currentlyPlaying.value
-// }
 
 </script>
 
