@@ -1,5 +1,6 @@
 <template>
-  <v-card width="100%" v-for="favorite in props.favoritesData" :key="favorite.id">
+  <FilterToolbar @filtersApplied="handlefiltersApplied" />
+  <v-card width="100%" v-for="favorite in sortedFavoritesData" :key="favorite.id">
     <div class="favContainer" v-if="favorite.isFavorite" :key="checkKey">
       <div class="favImage">
         <v-img :src="favorite.image" width="200" cover></v-img>
@@ -8,25 +9,98 @@
         <v-card-title>
           {{ favorite.episodeTitle }}
         </v-card-title>
-        <v-card-subtitle>{{ favorite.showTitle + ' - Season ' + favorite.season }}</v-card-subtitle>
+        <v-card-subtitle>
+          {{ favorite.showTitle + ' - Season ' + favorite.season }}
+          <v-chip>
+            LAST UPDATED:
+            {{ (new Date(favorite.lastUpdated)).getDate().toString().padStart(2, '0') }}/
+            {{ ((new Date(favorite.lastUpdated)).getMonth() + 1).toString().padStart(2, '0') }}/
+            {{ (new Date(favorite.lastUpdated)).getFullYear() }}
+          </v-chip>
+        </v-card-subtitle>
         <v-card-text>{{ favorite.episodeDescription }}</v-card-text>
         <v-btn icon="mdi-play" size="large" color="green" @click="episodeSelectedHandler(favorite)"
           :data-key="favorite.id"></v-btn>
         <v-btn icon='mdi-close' variant="tonal" size="large" @click="removeFavorite(favorite)"
           :data-key="favorite.id"></v-btn>
+        <v-chip>
+          ADDED TO FAVORITES:
+          {{ (new Date(favorite.dateAdded)).getDate().toString().padStart(2, '0') }}/
+          {{ ((new Date(favorite.dateAdded)).getMonth() + 1).toString().padStart(2, '0') }}/
+          {{ (new Date(favorite.dateAdded)).getFullYear() }}
+          {{ (new Date(favorite.dateAdded)).getHours() }}:{{ (new Date(favorite.dateAdded)).getMinutes() }}
+        </v-chip>
       </div>
     </div>
     <div v-else>Favorite removed</div>
   </v-card>
 </template>
 
+
 <script setup>
-import { ref } from 'vue'
+
+import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia';
 import { useAppStore } from '@/store/app';
 import { supabase } from '@/clients/supabase';
+import FilterToolbar from '@/components/FilterToolbar.vue'
 
 const props = defineProps(['favoritesData'])
+
+let sortMethod = ref("Unsorted")
+let textFilter = ref("")
+
+const handlefiltersApplied = (filters) => {
+  console.log(filters)
+  const { sortType, filterString } = filters
+  sortMethod.value = sortType
+  textFilter.value = filterString
+}
+
+const sortedFavoritesData = computed(() => {
+  let sortedFavorites = [...props.favoritesData];
+
+  if (sortMethod.value === "Alphabetical (A to Z)") {
+    sortedFavorites.sort((a, b) => {
+      let fa = a.showTitle.toLowerCase();
+      let fb = b.showTitle.toLowerCase();
+      if (fa < fb) {
+        return -1;
+      } else if (fa > fb) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+  }
+  else if (sortMethod.value === "Alphabetical (Z to A)") {
+    sortedFavorites.sort((a, b) => {
+      let fa = a.showTitle.toLowerCase();
+      let fb = b.showTitle.toLowerCase();
+      if (fa > fb) {
+        return -1;
+      } else if (fa < fb) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+  }
+
+  else if (sortMethod.value === "By earliest date updated") {
+    sortedFavorites.sort((a, b) => (new Date(b.lastUpdated
+    )).getTime() - (new Date(a.lastUpdated
+    )).getTime());
+  }
+  else if (sortMethod.value === "By latest date updated") {
+    sortedFavorites.sort((a, b) => (new Date(a.lastUpdated
+    )).getTime() - (new Date(b.lastUpdated
+    )).getTime());
+  }
+
+  return sortedFavorites;
+}
+);
 
 const { currentlyPlaying } = storeToRefs(useAppStore())
 
@@ -84,57 +158,3 @@ const episodeSelectedHandler = (favorite) => {
   flex: 5
 }
 </style>
-
-<!-- // const removeFavorite = async (favorite) => {
-  //   try {
-  //     // Check if the episode is already favorited
-  //     if (favorite.isFavorite) {
-  //       // If it's favorited, remove it from the database
-  //       await supabase
-  //         .from('favorites')
-  //         .delete()
-  //         .eq('id', favorite.id)
-  //       console.log("Removed fav")
-  //     }
-  
-  //     // Update the isFavorite property in the episode object
-  //     favorite.isFavorite = !favorite.isFavorite;
-  //     checkKey.value++
-  //   } catch (error) {
-  //     console.error('Error toggling favorite:', error);
-  //   }
-  // };
-  
-  // const episodeSelectedHandler = async (event) => {
-  //   try {
-  //     // If episode is already in database, get record from the database for start time
-  //     const episodeToPlayId = event.target.closest('[data-key]').dataset.key
-  //     const episodeToPlay = props.favoritesData.find((episode) => episode.id == episodeToPlayId)
-  
-  //     let time = 0
-  //     let { data } = await supabase
-  //       .from('favorites')
-  //       .select('id, time_played') // can work off just the ID?
-  //       .eq('showId', episodeToPlay.id)
-  //       .eq('season', episodeToPlay.season)
-  //       .eq('episode', episodeToPlay.episode)
-  //     if (data.length > 0) {
-  //       time = data[0].time_played
-  //       console.log("Episode already in database")
-  //     } else {
-  //       time = 0
-  //     }
-  
-  //     // Update the the currently playing value in the store
-  //     currentlyPlaying.value.showId = episodeToPlay.showId
-  //     currentlyPlaying.value.showTitle = episodeToPlay.showTitle
-  //     currentlyPlaying.value.episodeTitle = episodeToPlay.episodeTitle
-  //     currentlyPlaying.value.episode = episodeToPlay.episode
-  //     currentlyPlaying.value.season = episodeToPlay.season
-  //     currentlyPlaying.value.file = episodeToPlay.file
-  //     currentlyPlaying.value.timePlayed = time // If is data, gets set from DB, otherwise is 0
-  //   }
-  //   catch (error) {
-  //     console.error('Error adding listening history / loading currently playing:', error);
-  //   }
-  // }; -->

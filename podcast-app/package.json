@@ -12,6 +12,7 @@
     "@mdi/font": "7.0.96",
     "@supabase/supabase-js": "^2.26.0",
     "core-js": "^3.29.0",
+    "fuse.js": "^6.6.2",
     "pinia": "^2.0.0",
     "roboto-fontface": "*",
     "vue": "^3.2.0",

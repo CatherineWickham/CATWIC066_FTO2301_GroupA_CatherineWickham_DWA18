@@ -3,7 +3,7 @@
     <v-form @submit="handleFiltersSubmit">
       <v-select class="formItem" v-model="selectedSortType" label="Sort By" :items="sortTypesArray">
       </v-select>
-      <v-text-field class="formItem" v-model="filterString" label="Title"></v-text-field>
+      <v-text-field class="formItem" v-model="filterString" label="Filter By Show Title"></v-text-field>
       <v-btn class="formItem" type="submit" variant="outlined">Apply Filters</v-btn>
     </v-form>
   </v-toolbar>
