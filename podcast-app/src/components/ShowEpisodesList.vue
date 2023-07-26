@@ -48,20 +48,25 @@ const { currentlyPlaying } = storeToRefs(useAppStore())
 
 const toggleFavorite = async (season, episode) => {
   try {
-    // Check if the episode is already favorited
-    if (episode.isFavorite) {
-      // If it's favorited, remove it from the database 
-      // Problem: removes items that need to keep timestamps for
+    const { data } = await supabase
+      // Check if the episode is already in DB
+      .from('favorites')
+      .select('is_favorite, time_played')
+      .eq('showId', props.showData.id)
+      .eq('season', season.season)
+      .eq('episode', episode.episode);
+    if (data.length > 0) {
+      // if is in database, toggle favorite status
       await supabase
         .from('favorites')
-        .delete()
+        .update({ is_favorite: !episode.isFavorite, date_added: new Date() })
         .eq('showId', props.showData.id)
         .eq('season', season.season)
         .eq('episode', episode.episode);
-      console.log("Removed fav")
+      console.log("Updated existing fav in database")
     } else {
+      // if not in DB, add as a new favorite
       const localUser = await supabase.auth.getSession()
-      // If it's not favorited, add it to the database
       await supabase.from('favorites')
         .insert({
           user_email: localUser.data.session.user.email,
@@ -78,7 +83,7 @@ const toggleFavorite = async (season, episode) => {
           is_favorite: true,
           time_played: episode.timePlayed || 0,
         });
-      console.log("Added fav")
+      console.log("Added new fav to DB")
     }
 
     // Update the isFavorite property in the episode object
