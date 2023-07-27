@@ -82,6 +82,12 @@ const getSession = async () => {
 getSession()
 
 const toggleLoggedIn = async () => {
+  loginDialog.value = false
+  if (isLoggedIn.value === false) {
+    // Login
+    loginDialog.value = true
+  }
+
   if (isLoggedIn.value === true) {
     // Logout
     const { error } = await supabase.auth.signOut()
@@ -90,14 +96,9 @@ const toggleLoggedIn = async () => {
     } else {
       console.log("Logout successful")
       isLoggedIn.value = false
-      loginDialog.value = false
       uploadLastPlayed()
+      clearCurrentlyPlaying()
     }
-  }
-
-  if (isLoggedIn.value === false) {
-    // Login
-    loginDialog.value = true
   }
 }
 
@@ -113,6 +114,18 @@ const login = async () => {
     console.log(data)
     isLoggedIn.value = true
     fetchLastPlayed()
+  }
+}
+
+const clearCurrentlyPlaying = () => {
+  currentlyPlaying.value = {
+    showId: null,
+    showTitle: null,
+    episodeTitle: null,
+    episode: null,
+    season: null,
+    file: null,
+    timePlayed: 0,
   }
 }
 
