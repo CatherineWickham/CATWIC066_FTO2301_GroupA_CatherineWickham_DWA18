@@ -3,7 +3,9 @@
     <ShowHero @seasonSelected="handleSeasonSelect" :showData="showData"></ShowHero>
     <ShowEpisodesList :showData="showData" :seasonFilter="seasonFilter"></ShowEpisodesList>
   </v-container>
-  <div v-else>Loading</div>
+  <v-container v-else class="loadingContainer">
+    <LoadingIndicator />
+  </v-container>
 </template>
 
 <script setup>
@@ -13,6 +15,7 @@ import { useAppStore } from '@/store/app';
 import ShowHero from '@/components/ShowHero.vue'
 import ShowEpisodesList from '@/components/ShowEpisodesList.vue'
 import { supabase } from '@/clients/supabase';
+import LoadingIndicator from '@/components/LoadingIndicator.vue'
 
 let showDataReady = ref(false)
 
@@ -104,5 +107,15 @@ const handleSeasonSelect = (season) => {
 <style scoped>
 .v-container {
   justify-content: center;
+}
+
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>

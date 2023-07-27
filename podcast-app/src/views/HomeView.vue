@@ -8,7 +8,9 @@
       :updated="preview.updated">
     </PreviewCard>
   </v-container>
-  <div v-else>Loading</div>
+  <v-container v-else class="loadingContainer">
+    <LoadingIndicator />
+  </v-container>
 </template>
 
 <script setup>
@@ -16,6 +18,7 @@ import PreviewCard from '@/components/PreviewCard.vue'
 import FilterToolbar from '@/components/FilterToolbar.vue'
 import RecommendedCarousel from '@/components/RecommendedCarousel.vue';
 import { reactive, ref, computed } from 'vue';
+import LoadingIndicator from '@/components/LoadingIndicator.vue'
 // import { useFuse } from '@vueuse/integrations/useFuse'
 
 const getRecommended = (previews) => {
@@ -99,7 +102,17 @@ const sortedPreviewData = computed(() => {
 
 </script>
 
-<style scoped></style>
+<style scoped>
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+</style>
 
 
 <!-- 
