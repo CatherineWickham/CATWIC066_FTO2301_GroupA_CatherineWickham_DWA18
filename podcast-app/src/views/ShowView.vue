@@ -44,6 +44,7 @@ const fetchShowData = async () => {
           });
         }
       }
+      const localUser = await supabase.auth.getSession()
 
       // Fetch DB entries for all episodes in parallel
       const favoritePromises = episodesToCheck.map(({ showId, season, episode }) => {
@@ -51,6 +52,7 @@ const fetchShowData = async () => {
           .from('favorites')
           // .select('id')
           .select('id, is_favorite, time_played')
+          .eq('user_email', localUser.data.session.user.email)
           .eq('showId', showId)
           .eq('season', season)
           .eq('episode', episode)

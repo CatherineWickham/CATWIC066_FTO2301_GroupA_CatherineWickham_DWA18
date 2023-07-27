@@ -49,10 +49,12 @@ const { currentlyPlaying } = storeToRefs(useAppStore())
 
 const toggleFavorite = async (season, episode) => {
   try {
+    const localUser = await supabase.auth.getSession()
     const { data } = await supabase
       // Check if the episode is already in DB
       .from('favorites')
       .select('is_favorite, time_played')
+      .eq('user_email', localUser.data.session.user.email)
       .eq('showId', props.showData.id)
       .eq('season', season.season)
       .eq('episode', episode.episode);
@@ -61,6 +63,7 @@ const toggleFavorite = async (season, episode) => {
       await supabase
         .from('favorites')
         .update({ is_favorite: !episode.isFavorite, date_added: new Date() })
+        .eq('user_email', localUser.data.session.user.email)
         .eq('showId', props.showData.id)
         .eq('season', season.season)
         .eq('episode', episode.episode);
@@ -104,6 +107,7 @@ const episodeSelectedHandler = async (season, episode) => {
     let { data } = await supabase
       .from('favorites')
       .select('id, time_played') // can work off just the ID?
+      .eq('user_email', localUser.data.session.user.email)
       .eq('showId', props.showData.id)
       .eq('season', season.season)
       .eq('episode', episode.episode)

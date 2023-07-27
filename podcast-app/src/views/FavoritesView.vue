@@ -3,25 +3,29 @@
     <FavoritesList :favoritesData="favoritesData"></FavoritesList>
     <div class="bottomSpacer"></div>
   </v-container>
-  <div v-else>Loading</div>
+  <v-container v-else class="loadingContainer">
+    <LoadingIndicator />
+  </v-container>
 </template>
 
 <script setup>
 import { ref, reactive } from 'vue'
 import FavoritesList from '@/components/FavoritesList.vue'
 import { supabase } from '@/clients/supabase';
+import LoadingIndicator from '@/components/LoadingIndicator.vue'
 
 let favoritesDataReady = ref(false) // remember to change back to false default
 
 let favoritesData = reactive([])
 
 const fetchFavoritesData = async () => {
+  const localUser = await supabase.auth.getSession()
   try {
     let favoritesArray = []
     let { data } = await supabase
       .from('favorites')
       .select('*')
-
+      .eq('user_email', localUser.data.session.user.email)
       .eq('is_favorite', true)
     for (const item of data) {
       favoritesArray.push({

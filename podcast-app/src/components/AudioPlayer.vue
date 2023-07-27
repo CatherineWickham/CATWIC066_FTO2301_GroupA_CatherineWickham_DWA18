@@ -31,10 +31,11 @@ const setTimePlayed = (event) => {
 const getTimePlayed = async (event) => {
   const timePlayed = event.target.currentTime
   currentlyPlaying.value.timePlayed = Math.floor(timePlayed)
-  console.log(currentlyPlaying.value)
+  const localUser = await supabase.auth.getSession()
   await supabase
     .from('favorites')
     .update({ time_played: currentlyPlaying.value.timePlayed })
+    .eq('user_email', localUser.data.session.user.email)
     .eq('showId', currentlyPlaying.value.showId)
     .eq('season', currentlyPlaying.value.season)
     .eq('episode', currentlyPlaying.value.episode);

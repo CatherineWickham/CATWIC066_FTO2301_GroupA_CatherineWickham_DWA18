@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <h1>Login</h1>
 
   <div class="inputContainer">
@@ -98,4 +98,4 @@ input{
   border-radius: 10px;
   margin-left: 1rem;
 }
-</style>
+</style> -->

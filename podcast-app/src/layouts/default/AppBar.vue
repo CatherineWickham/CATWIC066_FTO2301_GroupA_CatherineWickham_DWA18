@@ -6,14 +6,6 @@
     </v-app-bar-title>
     <nav>
 
-      <!-- <div class="buttonWrapper">
-        <v-btn variant="tonal" size="small" @click="loginDialog = true">Login</v-btn>
-      </div>
-
-      <div class="buttonWrapper">
-        <v-btn variant="tonal" size="small" @click="logout">Logout</v-btn>
-      </div> -->
-
       <div class="buttonWrapper">
         <v-btn variant="tonal" size="small" prepend-icon="mdi-home">
           <router-link to="/">Home</router-link>
@@ -27,18 +19,35 @@
       </div>
 
       <div class="buttonWrapper">
-        <v-btn variant="tonal" size="small" prepend-icon="mdi-heart">
-          <router-link to="/favorites">Favorites</router-link>
+        <v-btn variant="tonal" size="small" prepend-icon="mdi-account">
+          My Account
+
+          <v-menu activator="parent">
+            <v-list>
+              <v-list-item>
+                <v-btn variant="text" block size="small" prepend-icon="mdi-heart">
+                  <router-link to="/favorites">Go to my favorites</router-link>
+                </v-btn>
+              </v-list-item>
+              <v-list-item>
+                <v-btn @click="clearHistoryDialog = true" variant="text" block size="small"
+                  prepend-icon="mdi-delete-sweep">
+                  Clear Listening History
+                </v-btn>
+              </v-list-item>
+            </v-list>
+          </v-menu>
         </v-btn>
       </div>
 
-      <div class="buttonWrapper">
-        <v-btn color="primary" variant="tonal" size="small" @click="toggleLoggedIn">{{ isLoggedIn ?
-          'logout' : 'login' }}</v-btn>
+      <div v-if="isLoggedIn" class="buttonWrapper">
+        <v-btn color="primary" variant="tonal" size="small" @click="toggleLoggedIn"><router-link
+            to="/">Logout</router-link></v-btn>
       </div>
-
+      <div v-else class="buttonWrapper">
+        <v-btn color="primary" variant="tonal" size="small" @click="toggleLoggedIn">Login</v-btn>
+      </div>
     </nav>
-
 
   </v-app-bar>
 
@@ -55,6 +64,17 @@
       </form>
     </v-card>
   </v-dialog>
+
+  <v-dialog class="clearHistoryDialog" v-model="clearHistoryDialog" width="25%">
+    <v-card>
+      <v-card-title>Confirm clear listening history</v-card-title>
+      <v-card-text>This will remove all your favorites and recorded timestamps of any episodes
+        you have listened to. Are you sure you want to proceed?</v-card-text>
+      <br>
+      <v-btn class="dialogButton" @click="clearHistoryDialog = false">Cancel</v-btn>
+      <v-btn class="dialogButton" color="primary" @click="clearHistory">Confirm</v-btn>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup>
@@ -68,6 +88,31 @@ let loginDialog = ref(false)
 let loginEmail = ref("");
 let loginPassword = ref("");
 let isLoggedIn = ref("")
+let clearHistoryDialog = ref(false)
+
+const clearHistory = async () => {
+  clearHistoryDialog.value = false
+  const localUser = await supabase.auth.getSession()
+  if (localUser.data.session === null) {
+    return
+  } else {
+    try {
+      await supabase
+        .from('favorites')
+        .delete('*')
+        .eq('user_email', localUser.data.session.user.email);
+      await supabase
+        .from('last_played_tracks')
+        .delete('*')
+        .eq('user_email', localUser.data.session.user.email);
+      clearCurrentlyPlaying()
+      console.log("Cleared history")
+
+    } catch (error) {
+      console.error('Error clearing history:', error);
+    }
+  }
+}
 
 const getSession = async () => {
   const { data } = await supabase.auth.getSession()
@@ -128,16 +173,6 @@ const clearCurrentlyPlaying = () => {
     timePlayed: 0,
   }
 }
-
-// const logout = async () => {
-//   const { error } = await supabase.auth.signOut()
-//   if (error) {
-//     console.log(error)
-//   } else {
-//     console.log("Logout successful")
-//     uploadLastPlayed()
-//   }
-// }
 
 window.addEventListener("beforeunload", uploadLastPlayed)
 
@@ -239,5 +274,13 @@ a {
 
 .v-card {
   padding: 3rem;
+}
+
+.clearHistoryDialog {
+  text-align: center;
+}
+
+.dialogButton {
+  margin: 0.4rem;
 }
 </style>

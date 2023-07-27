@@ -122,10 +122,12 @@ const { currentlyPlaying } = storeToRefs(useAppStore())
 let checkKey = ref(0)
 
 const removeFavorite = async (favorite) => {
+  const localUser = await supabase.auth.getSession()
   try {
     await supabase
       .from('favorites')
       .update({ is_favorite: !favorite.isFavorite })
+      .eq('user_email', localUser.data.session.user.email)
       .eq('showId', favorite.showId)
       .eq('season', favorite.season)
       .eq('episode', favorite.episode);
