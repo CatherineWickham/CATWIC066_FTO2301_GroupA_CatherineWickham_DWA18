@@ -3,10 +3,13 @@
     <h2 style="text-align: center">You may be interested in...</h2>
     <RecommendedCarousel :recommended="recommendedArray" />
     <FilterToolbar @filtersApplied="handlefiltersApplied" />
-    <PreviewCard v-for="(preview) in sortedPreviewData" :key="preview.id" :id="preview.id" :title="preview.title"
-      :seasons="preview.seasons" :description="preview.description" :image="preview.image" :genres="preview.genres"
-      :updated="preview.updated">
+
+
+    <PreviewCard v-for="(preview) in sortedPreviewData" :key="preview.item.id" :id="preview.item.id"
+      :title="preview.item.title" :seasons="preview.item.seasons" :description="preview.item.description"
+      :image="preview.item.image" :genres="preview.item.genres" :updated="preview.item.updated">
     </PreviewCard>
+
   </v-container>
   <v-container v-else class="loadingContainer">
     <LoadingIndicator />
@@ -19,7 +22,7 @@ import FilterToolbar from '@/components/FilterToolbar.vue'
 import RecommendedCarousel from '@/components/RecommendedCarousel.vue';
 import { reactive, ref, computed } from 'vue';
 import LoadingIndicator from '@/components/LoadingIndicator.vue'
-// import { useFuse } from '@vueuse/integrations/useFuse'
+import { useFuse } from '@vueuse/integrations/useFuse'
 
 const getRecommended = (previews) => {
   const recommended = []
@@ -50,7 +53,6 @@ let sortMethod = ref("Unsorted")
 let textFilter = ref("")
 
 const handlefiltersApplied = (filters) => {
-  console.log(filters)
   const { sortType, filterString } = filters
   sortMethod.value = sortType
   textFilter.value = filterString
@@ -93,10 +95,22 @@ const sortedPreviewData = computed(() => {
     sortedPreviews.sort((a, b) => (new Date(a.updated)).getTime() - (new Date(b.updated)).getTime());
   }
 
-  // let { results } = useFuse(textFilter, sortedPreviews)
-  // return results;
-  // structure of data has changed from original previews - can't find props to pass
+  // Fuse.js fuzzy matching
+  const options = computed(() => ({
+    fuseOptions: {
+      keys: ['title'],
+      isCaseSensitive: false,
+      threshold: 0.4,
+    },
+    matchAllWhenSearchEmpty: true,
+  }))
 
+  const { results } = useFuse(textFilter, sortedPreviews, options)
+  if (results && results.value && results.value.length > 0) {
+    return results.value;
+  }
+
+  // If no results found, return the original sortedPreviews array
   return sortedPreviews;
 });
 
@@ -113,29 +127,3 @@ const sortedPreviewData = computed(() => {
   transform: translate(-50%, -50%);
 }
 </style>
-
-
-<!-- 
-import { ref } from 'vue'
-import { useFuse } from '@vueuse/integrations/useFuse'
-
-const data = [
-  'John Smith',
-  'John Doe',
-  'Jane Doe',
-  'Phillip Green',
-  'Peter Brown',
-]
-
-const input = ref('Jhon D')
-
-const { results } = useFuse(input, data)
-
-/*
- * Results:
- *
- * { "item": "John Doe", "index": 1 }
- * { "item": "John Smith", "index": 0 }
- * { "item": "Jane Doe", "index": 2 }
- *
- */ -->

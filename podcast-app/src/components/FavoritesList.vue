@@ -44,6 +44,7 @@ import { storeToRefs } from 'pinia';
 import { useAppStore } from '@/store/app';
 import { supabase } from '@/clients/supabase';
 import FilterToolbar from '@/components/FilterToolbar.vue'
+// import { useFuse } from '@vueuse/integrations/useFuse'
 
 const props = defineProps(['favoritesData'])
 
@@ -51,7 +52,6 @@ let sortMethod = ref("Unsorted")
 let textFilter = ref("")
 
 const handlefiltersApplied = (filters) => {
-  console.log(filters)
   const { sortType, filterString } = filters
   sortMethod.value = sortType
   textFilter.value = filterString
@@ -97,6 +97,21 @@ const sortedFavoritesData = computed(() => {
     )).getTime() - (new Date(b.lastUpdated
     )).getTime());
   }
+
+  // // Fuse.js fuzzy matching
+  // const options = computed(() => ({
+  //   fuseOptions: {
+  //     keys: ['showTitle'],
+  //     isCaseSensitive: false,
+  //     threshold: 0.4,
+  //   },
+  //   matchAllWhenSearchEmpty: true,
+  // }))
+
+  // const { results } = useFuse(textFilter, sortedFavorites, options)
+  // if (results && results.value && results.value.length > 0) {
+  //   return results.value;
+  // }
 
   return sortedFavorites;
 }

@@ -156,7 +156,6 @@ const filteredShowData = computed(() => {
     return filteredData
   }
 
-  // return props.showData.seasons
 });
 
 </script>
