@@ -5,9 +5,10 @@
     <FilterToolbar @filtersApplied="handlefiltersApplied" />
 
 
-    <PreviewCard v-for="(preview) in sortedPreviewData" :key="preview.item.id" :id="preview.item.id"
-      :title="preview.item.title" :seasons="preview.item.seasons" :description="preview.item.description"
-      :image="preview.item.image" :genres="preview.item.genres" :updated="preview.item.updated">
+    <PreviewCard @genreSelected="handleGenreSelected" v-for="(preview) in sortedPreviewData" :key="preview.item.id"
+      :id="preview.item.id" :title="preview.item.title" :seasons="preview.item.seasons"
+      :description="preview.item.description" :image="preview.item.image" :genres="preview.item.genres"
+      :updated="preview.item.updated">
     </PreviewCard>
 
   </v-container>
@@ -23,6 +24,18 @@ import RecommendedCarousel from '@/components/RecommendedCarousel.vue';
 import { reactive, ref, computed } from 'vue';
 import LoadingIndicator from '@/components/LoadingIndicator.vue'
 import { useFuse } from '@vueuse/integrations/useFuse'
+
+const GENRE_MAP = {
+  1: "Personal Growth",
+  2: "True Crime and Investigative Journalism",
+  3: "History",
+  4: "Comedy",
+  5: "Entertainment",
+  6: "Business",
+  7: "Fiction",
+  8: "News",
+  9: "Kids and Family",
+}
 
 const getRecommended = (previews) => {
   const recommended = []
@@ -51,11 +64,23 @@ fetchPreviewData()
 
 let sortMethod = ref("Unsorted")
 let textFilter = ref("")
+let genreFilter = ref(null)
 
 const handlefiltersApplied = (filters) => {
-  const { sortType, filterString } = filters
+  const { sortType, filterString, selectedGenre } = filters
+  if (selectedGenre === "All Genres") {
+    genreFilter.value = null
+    return
+  } else {
+    const genreKey = Object.keys(GENRE_MAP).find(key => GENRE_MAP[key] === selectedGenre);
+    genreFilter.value = parseInt(genreKey)
+  }
   sortMethod.value = sortType
   textFilter.value = filterString
+}
+
+const handleGenreSelected = (genreKey) => {
+  genreFilter.value = parseInt(genreKey)
 }
 
 const sortedPreviewData = computed(() => {
@@ -105,9 +130,14 @@ const sortedPreviewData = computed(() => {
     matchAllWhenSearchEmpty: true,
   }))
 
+  if (genreFilter.value !== null) {
+    const genreFiltered = sortedPreviews.filter((preview) => preview.genres.includes(genreFilter.value))
+    sortedPreviews = genreFiltered
+  }
+
   const { results } = useFuse(textFilter, sortedPreviews, options)
   if (results && results.value && results.value.length > 0) {
-    return results.value;
+    sortedPreviews = results.value;
   }
 
   // If no results found, return the original sortedPreviews array

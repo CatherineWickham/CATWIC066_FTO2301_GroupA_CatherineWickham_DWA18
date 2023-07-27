@@ -18,7 +18,9 @@
     <v-card-text class="line-clamp">
       {{ description }}
     </v-card-text>
-    <v-chip v-for="(genre, index) in props.genres" :key="index">{{ GENRE_MAP[genre] }}
+    <v-chip @click="handleGenreSelect" v-for="(genre, index) in
+    props.genres" :key="index">{{
+      GENRE_MAP[genre] }}
     </v-chip>
   </v-card>
 </template>
@@ -41,6 +43,14 @@ const GENRE_MAP = {
   7: "Fiction",
   8: "News",
   9: "Kids and Family",
+}
+
+const emit = defineEmits(['genreSelected'])
+
+const handleGenreSelect = (event) => {
+  const genreName = event.target.innerText
+  const genreKey = Object.keys(GENRE_MAP).find(key => GENRE_MAP[key] === genreName);
+  emit('genreSelected', genreKey);
 }
 
 const updated = new Date(props.updated)

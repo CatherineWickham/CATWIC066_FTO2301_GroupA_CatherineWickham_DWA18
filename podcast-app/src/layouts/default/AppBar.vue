@@ -139,7 +139,7 @@ const toggleLoggedIn = async () => {
     if (error) {
       console.log(error)
     } else {
-      console.log("Logout successful")
+      alert("Logout successful")
       isLoggedIn.value = false
       uploadLastPlayed()
       clearCurrentlyPlaying()
@@ -159,6 +159,7 @@ const login = async () => {
     console.log(data)
     isLoggedIn.value = true
     fetchLastPlayed()
+    alert("Login successful")
   }
 }
 

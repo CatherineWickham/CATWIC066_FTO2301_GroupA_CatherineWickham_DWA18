@@ -3,6 +3,8 @@
     <v-form @submit="handleFiltersSubmit">
       <v-select class="formItem" v-model="selectedSortType" label="Sort By" :items="sortTypesArray">
       </v-select>
+      <v-select class="formItem" v-model="selectedGenre" label="Select
+      Genre" :items="genresArray"></v-select>
       <v-text-field class="formItem" v-model="filterString" label="Filter By Show Title"></v-text-field>
       <v-btn class="formItem" type="submit" variant="outlined">Apply Filters</v-btn>
     </v-form>
@@ -12,9 +14,23 @@
 <script setup>
 import { ref } from 'vue'
 
+let genresArray = [
+  "All Genres",
+  "Personal Growth",
+  "True Crime and Investigative Journalism",
+  "History",
+  "Comedy",
+  "Entertainment",
+  "Business",
+  "Fiction",
+  "News",
+  "Kids and Family",
+]
+
 let sortTypesArray = ["Unsorted", "Alphabetical (A to Z)", "Alphabetical (Z to A)", "By earliest date updated", "By latest date updated"]
 let selectedSortType = ref("Unsorted")
 let filterString = ref("")
+let selectedGenre = ref("All Genres")
 
 const emit = defineEmits(['filtersApplied'])
 
@@ -23,6 +39,7 @@ const handleFiltersSubmit = (event) => {
   const filters = {
     sortType: selectedSortType.value,
     filterString: filterString.value,
+    selectedGenre: selectedGenre.value,
   }
   emit('filtersApplied', filters)
 }
@@ -50,21 +67,3 @@ const handleFiltersSubmit = (event) => {
   width: 30%;
 }
 </style>
-
-
-<!-- <v-select @update:menu="handleGenreSelect" v-model="selectedGenre" label="Select
-Genre" :items="genresArray"></v-select>
-
-
-let genresArray = [
-  "All Genres",
-  "Personal Growth",
-  "True Crime and Investigative Journalism",
-  "History",
-  "Comedy",
-  "Entertainment",
-  "Business",
-  "Fiction",
-  "News",
-  "Kids and Family",
-] -->
