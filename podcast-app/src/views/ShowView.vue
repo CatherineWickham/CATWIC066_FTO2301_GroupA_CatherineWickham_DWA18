@@ -1,7 +1,7 @@
 <template>
   <v-container v-if="showDataReady" class="fill-height">
-    <ShowHero :showData="showData"></ShowHero>
-    <ShowEpisodesList :showData="showData"></ShowEpisodesList>
+    <ShowHero @seasonSelected="handleSeasonSelect" :showData="showData"></ShowHero>
+    <ShowEpisodesList :showData="showData" :seasonFilter="seasonFilter"></ShowEpisodesList>
   </v-container>
   <div v-else>Loading</div>
 </template>
@@ -92,6 +92,12 @@ const fetchShowData = async () => {
 };
 
 fetchShowData()
+
+let seasonFilter = ref("")
+
+const handleSeasonSelect = (season) => {
+  seasonFilter.value = season
+}
 
 </script>
 

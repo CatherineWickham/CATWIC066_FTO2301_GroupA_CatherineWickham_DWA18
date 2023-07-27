@@ -1,5 +1,5 @@
 <template>
-  <v-card width="100%" class="seasonContainer" v-for="season in props.showData.seasons" :key="season.season">
+  <v-card width="100%" class="seasonContainer" v-for="season in filteredShowData" :key="season.season">
     <div class="seasonInfo">
       <img :src="season.image" height="100">
       <v-card-title>Season {{ season.season }}</v-card-title>
@@ -33,12 +33,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia';
 import { useAppStore } from '@/store/app';
 import { supabase } from '@/clients/supabase';
 
-const props = defineProps(['showData'])
+const props = defineProps(['showData', 'seasonFilter'])
 
 let filledHeartKey = ref(0)
 let emptyHeartKey = ref(1)
@@ -144,6 +144,20 @@ const episodeSelectedHandler = async (season, episode) => {
     console.error('Error adding listening history / loading currently playing:', error);
   }
 };
+
+const filteredShowData = computed(() => {
+
+  if (props.seasonFilter === "All Seasons" || props.seasonFilter === "") {
+    return props.showData.seasons
+  } else {
+    // use filter on array based on season number
+    const seasonNumber = parseInt(props.seasonFilter.split(" ")[1])
+    const filteredData = props.showData.seasons.filter((item) => item.season === seasonNumber)
+    return filteredData
+  }
+
+  // return props.showData.seasons
+});
 
 </script>
 

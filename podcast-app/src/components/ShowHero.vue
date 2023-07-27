@@ -38,8 +38,15 @@ props.showData.seasons.map((season) => {
 
 let selectedSeason = ref("")
 
-const handleSeasonSelect = () => {
-  console.log(selectedSeason.value)
+const emit = defineEmits(['seasonSelected'])
+
+const handleSeasonSelect = (event) => {
+  let season = null
+  if (event === true) {
+    return
+  }
+  season = selectedSeason.value
+  emit('seasonSelected', season)
 }
 
 </script>

@@ -16,6 +16,7 @@ import PreviewCard from '@/components/PreviewCard.vue'
 import FilterToolbar from '@/components/FilterToolbar.vue'
 import RecommendedCarousel from '@/components/RecommendedCarousel.vue';
 import { reactive, ref, computed } from 'vue';
+// import { useFuse } from '@vueuse/integrations/useFuse'
 
 const getRecommended = (previews) => {
   const recommended = []
@@ -89,6 +90,10 @@ const sortedPreviewData = computed(() => {
     sortedPreviews.sort((a, b) => (new Date(a.updated)).getTime() - (new Date(b.updated)).getTime());
   }
 
+  // let { results } = useFuse(textFilter, sortedPreviews)
+  // return results;
+  // structure of data has changed from original previews - can't find props to pass
+
   return sortedPreviews;
 });
 
@@ -97,36 +102,27 @@ const sortedPreviewData = computed(() => {
 <style scoped></style>
 
 
-<!-- computed: {
-	sortedArray() {
-		let sortedRecipes = this.recipes;
-		
-    if (sortMethod == 'alphabetically' {
-      sortedRecipes = sortedRecipes.sort((a,b) => {
-			let fa = a.title.toLowerCase(), fb = b.title.toLowerCase();
-			if (fa < fb) {
-				return -1
-			}
-			if (fa > fb) {
-				return 1
-			}
-			return 0
-		})
-    } else if (sortMethod == 'cookingTime' {
-      sortedRecipes = sortedRecipes.sort((a,b) => {
-        return a.cookingTime - b.cookingTime
-    })
-} -->
+<!-- 
+import { ref } from 'vue'
+import { useFuse } from '@vueuse/integrations/useFuse'
 
+const data = [
+  'John Smith',
+  'John Doe',
+  'Jane Doe',
+  'Phillip Green',
+  'Peter Brown',
+]
 
-<!-- computed: {
-  filteredRecipes() {
-    let tempRecipes = this.recipes
-    
-    tempRecipes = tempRecipes.filter((item) => {
-      return (item.cookingTime <= this.maxCookingTime)
-    })
-    
-    return tempRecipes;
-  }
-} -->
+const input = ref('Jhon D')
+
+const { results } = useFuse(input, data)
+
+/*
+ * Results:
+ *
+ * { "item": "John Doe", "index": 1 }
+ * { "item": "John Smith", "index": 0 }
+ * { "item": "Jane Doe", "index": 2 }
+ *
+ */ -->
