@@ -2,7 +2,7 @@
   <router-view />
 </template>
 
-<script setup>
+<!-- <script setup>
 import { storeToRefs } from 'pinia';
 import { useAppStore } from '@/store/app';
 import { supabase } from "@/clients/supabase";
@@ -41,6 +41,9 @@ async function uploadLastPlayed() {
 
 async function fetchLastPlayed() {
   const localUser = await supabase.auth.getSession()
+  if (localUser === null) {
+    return
+  }
   const lastPlayed = currentlyPlaying.value
   try {
     const { data, error } = await supabase
@@ -81,4 +84,4 @@ onMounted(() => {
 //   alert(`the component is being unmounted`)
 // })
 
-</script>
+</script> -->

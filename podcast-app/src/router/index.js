@@ -15,6 +15,28 @@ const routes = [
     ],
   },
   {
+    path: "/signup",
+    component: () => import("@/layouts/default/DefaultLayout.vue"),
+    children: [
+      {
+        path: "",
+        name: "SignUp",
+        component: () => import("@/views/SignupView.vue"),
+      },
+    ],
+  },
+  {
+    path: "/browse",
+    component: () => import("@/layouts/default/DefaultLayout.vue"),
+    children: [
+      {
+        path: "",
+        name: "Browse",
+        component: () => import("@/views/BrowseView.vue"),
+      },
+    ],
+  },
+  {
     path: "/season",
     component: () => import("@/layouts/default/DefaultLayout.vue"),
     children: [
@@ -46,17 +68,6 @@ const routes = [
         name: "Favorites",
         component: () => import("@/views/FavoritesView.vue"),
         meta: { requiresAuth: true },
-      },
-    ],
-  },
-  {
-    path: "/login",
-    component: () => import("@/layouts/default/DefaultLayout.vue"),
-    children: [
-      {
-        path: "",
-        name: "Login",
-        component: () => import("@/views/LoginView.vue"),
       },
     ],
   },

@@ -1,141 +1,168 @@
 <template>
-  <v-container v-if="appReady" fluid class="fill-height">
-    <h2 style="text-align: center">You may be interested in...</h2>
-    <RecommendedCarousel :recommended="recommendedArray" />
-    <FilterToolbar @filtersApplied="handlefiltersApplied" />
-    <PreviewCard v-for="(preview) in sortedPreviewData" :key="preview.id" :id="preview.id" :title="preview.title"
-      :seasons="preview.seasons" :description="preview.description" :image="preview.image" :genres="preview.genres"
-      :updated="preview.updated">
-    </PreviewCard>
-  </v-container>
-  <v-container v-else class="loadingContainer">
-    <LoadingIndicator />
-  </v-container>
+  <div class="welcomeBanner">
+    <h1>Welcome to Poddle!</h1>
+    <h2>Splash into a world of podcasts</h2>
+    <br><br>
+    <v-item-group>
+      <v-btn @click="loginDialog = true">Login</v-btn>
+      <v-btn variant="tonal" @click="signupDialog = true">Sign Up</v-btn>
+      <v-btn @click="logout">Logout</v-btn>
+    </v-item-group>
+  </div>
+
+  <v-dialog v-model="loginDialog" width="50%">
+    <v-card>
+      <v-card-title>Log in to Poddle Account</v-card-title>
+      <form>
+        <v-text-field v-model="loginEmail" label="E-mail"></v-text-field>
+
+        <v-text-field v-model="loginPassword" label="Password"></v-text-field>
+
+        <v-btn class="me-4" @click="loginDialog = false">Cancel</v-btn>
+        <v-btn class="me-4" color="primary" @click="login">Login</v-btn>
+      </form>
+    </v-card>
+  </v-dialog>
+
+  <v-dialog v-model="signupDialog" width="50%">
+    <v-card>
+      <v-card-title>Create Poddle Account</v-card-title>
+      <form @submit.prevent="submit">
+
+        <v-text-field v-model="name.value.value" :counter="1" :error-messages="name.errorMessage.value"
+          label="Name"></v-text-field>
+
+        <v-text-field v-model="phone.value.value" :counter="7" :error-messages="phone.errorMessage.value"
+          label="Phone Number"></v-text-field>
+
+        <v-text-field v-model="email.value.value" :error-messages="email.errorMessage.value"
+          label="E-mail"></v-text-field>
+
+        <v-text-field v-model="password.value.value" :counter="10" :error-messages="password.errorMessage.value"
+          label="Password"></v-text-field>
+
+        <v-btn class="me-4" @click="signupDialog = false">Cancel</v-btn>
+        <v-btn class="me-4" color="primary" type="submit" @click="signupDialog = false">Sign Up</v-btn>
+      </form>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup>
-import PreviewCard from '@/components/PreviewCard.vue'
-import FilterToolbar from '@/components/FilterToolbar.vue'
-import RecommendedCarousel from '@/components/RecommendedCarousel.vue';
-import { reactive, ref, computed } from 'vue';
-import LoadingIndicator from '@/components/LoadingIndicator.vue'
-// import { useFuse } from '@vueuse/integrations/useFuse'
+import { ref } from 'vue'
+import { useField, useForm } from 'vee-validate'
+import { supabase } from '../clients/supabase'
+// import RecommendedCarousel from '@/components/RecommendedCarousel.vue';
 
-const getRecommended = (previews) => {
-  const recommended = []
-  recommended.push(previews[Math.floor((Math.random() * previews.length))])
-  recommended.push(previews[Math.floor((Math.random() * previews.length))])
-  recommended.push(previews[Math.floor((Math.random() * previews.length))])
-  return recommended
+let signupDialog = ref(false)
+let loginDialog = ref(false)
+
+let loginEmail = ref("");
+let loginPassword = ref("");
+
+const login = async () => {
+  loginDialog.value = false
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: loginEmail.value,
+    password: loginPassword.value
+  })
+  if (error) {
+    console.log(error)
+  } else {
+    console.log(data)
+  }
 }
 
-let appReady = ref(false)
-let previewData = reactive([])
-let recommendedArray = reactive([])
-
-const fetchPreviewData = async () => {
-  try {
-    const res = await fetch("https://podcast-api.netlify.app/shows");
-    previewData = await res.json();
-    recommendedArray = getRecommended(previewData)
-    appReady.value = true
-    return { previewData, recommendedArray };
-  } catch (error) {
-    console.error(error);
+const logout = async () => {
+  const { error } = await supabase.auth.signOut()
+  if (error) {
+    console.log(error)
+  } else {
+    console.log("Logout successful")
   }
-};
-fetchPreviewData()
-
-let sortMethod = ref("Unsorted")
-let textFilter = ref("")
-
-const handlefiltersApplied = (filters) => {
-  console.log(filters)
-  const { sortType, filterString } = filters
-  sortMethod.value = sortType
-  textFilter.value = filterString
 }
 
-const sortedPreviewData = computed(() => {
-  let sortedPreviews = [...previewData];
+const { handleSubmit } = useForm({
+  validationSchema: {
+    name(value) {
+      if (value?.length >= 1) return true
 
-  if (sortMethod.value === "Alphabetical (A to Z)") {
-    sortedPreviews.sort((a, b) => {
-      let fa = a.title.toLowerCase();
-      let fb = b.title.toLowerCase();
-      if (fa < fb) {
-        return -1;
-      } else if (fa > fb) {
-        return 1;
-      } else {
-        return 0;
+      return 'Name needs to be at least 1 character.'
+    },
+    phone(value) {
+      if (value?.length > 9 && /[0-9-]+/.test(value)) return true
+
+      return 'Phone number needs to be at least 9 digits.'
+    },
+    email(value) {
+      if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) return true
+
+      return 'Must be a valid e-mail.'
+    },
+    password(value) {
+      if (value?.length >= 10) return true
+
+      return 'Password needs to be at least 10 characters.'
+    },
+  },
+})
+const name = useField('name')
+const phone = useField('phone')
+const email = useField('email')
+const password = useField('password')
+
+const submit = handleSubmit(async (values) => {
+  const { data, error } = await supabase.auth.signUp({
+    email: values.email,
+    password: values.password,
+    options: {
+      data: {
+        name: values.name,
+        phone: values.phone,
       }
-    });
+    }
+  })
+  if (error) {
+    console.log(error)
+  } else {
+    console.log(data)
   }
-  else if (sortMethod.value === "Alphabetical (Z to A)") {
-    sortedPreviews.sort((a, b) => {
-      let fa = a.title.toLowerCase();
-      let fb = b.title.toLowerCase();
-      if (fa > fb) {
-        return -1;
-      } else if (fa < fb) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
-  }
-
-  else if (sortMethod.value === "By earliest date updated") {
-    sortedPreviews.sort((a, b) => (new Date(b.updated)).getTime() - (new Date(a.updated)).getTime());
-  }
-  else if (sortMethod.value === "By latest date updated") {
-    sortedPreviews.sort((a, b) => (new Date(a.updated)).getTime() - (new Date(b.updated)).getTime());
-  }
-
-  // let { results } = useFuse(textFilter, sortedPreviews)
-  // return results;
-  // structure of data has changed from original previews - can't find props to pass
-
-  return sortedPreviews;
-});
-
+})
 </script>
 
 <style scoped>
-.loadingContainer {
+.form {
   display: flex;
-  align-items: center;
   justify-content: center;
-  position: fixed;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  width: 80%;
+  margin: 2rem;
+}
+
+.v-card {
+  padding: 3rem;
+}
+
+.welcomeBanner {
+  background-image: url("https://images.unsplash.com/photo-1550684848-fac1c5b4e853?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80");
+  background-size: cover;
+  padding: 10rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 10vh;
+  color: black;
+}
+
+h1 {
+  font-size: 3rem;
+  font-weight: 900;
+  margin: 1.2rem;
+  padding: 0;
+}
+
+main {
+  --v-layout-top: 0px;
 }
 </style>
-
-
-<!-- 
-import { ref } from 'vue'
-import { useFuse } from '@vueuse/integrations/useFuse'
-
-const data = [
-  'John Smith',
-  'John Doe',
-  'Jane Doe',
-  'Phillip Green',
-  'Peter Brown',
-]
-
-const input = ref('Jhon D')
-
-const { results } = useFuse(input, data)
-
-/*
- * Results:
- *
- * { "item": "John Doe", "index": 1 }
- * { "item": "John Smith", "index": 0 }
- * { "item": "Jane Doe", "index": 2 }
- *
- */ -->

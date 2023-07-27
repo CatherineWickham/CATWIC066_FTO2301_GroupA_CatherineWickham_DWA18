@@ -5,27 +5,21 @@
       Poddle
     </v-app-bar-title>
     <nav>
-      
+
       <div class="buttonWrapper">
-        <v-btn variant="tonal" size="small" rounded="xl">
-          <router-link to="/show">Show View</router-link>
+        <v-btn variant="tonal" size="small">
+          <router-link to="/browse">Browse</router-link>
         </v-btn>
       </div>
 
       <div class="buttonWrapper">
-        <v-btn variant="tonal" size="small" rounded="xl">
-          <router-link to="/login">Login</router-link>
-        </v-btn>
-      </div>
-
-      <div class="buttonWrapper">
-        <v-btn variant="tonal" size="small" rounded="xl" prepend-icon="mdi-heart">
+        <v-btn variant="tonal" size="small" prepend-icon="mdi-heart">
           <router-link to="/favorites">Favorites</router-link>
         </v-btn>
       </div>
 
       <div class="buttonWrapper">
-        <v-btn variant="tonal" size="small" rounded="xl" prepend-icon="mdi-home">
+        <v-btn variant="tonal" size="small" prepend-icon="mdi-home">
           <router-link to="/">Home</router-link>
         </v-btn>
       </div>
@@ -38,15 +32,16 @@
 </script>
 
 <style scoped>
-  nav{
-    display: flex;
-  }
-  .buttonWrapper {
-    margin: 1rem;
-  }
+nav {
+  display: flex;
+}
 
-  a {
-    text-decoration: none;
-    color: white
-  }
+.buttonWrapper {
+  margin: 1rem;
+}
+
+a {
+  text-decoration: none;
+  color: white
+}
 </style>
