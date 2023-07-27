@@ -21,6 +21,7 @@ const fetchFavoritesData = async () => {
     let { data } = await supabase
       .from('favorites')
       .select('*')
+
       .eq('is_favorite', true)
     for (const item of data) {
       favoritesArray.push({
