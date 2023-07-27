@@ -6,6 +6,20 @@
     </v-app-bar-title>
     <nav>
 
+      <!-- <div class="buttonWrapper">
+        <v-btn variant="tonal" size="small" @click="loginDialog = true">Login</v-btn>
+      </div>
+
+      <div class="buttonWrapper">
+        <v-btn variant="tonal" size="small" @click="logout">Logout</v-btn>
+      </div> -->
+
+      <div class="buttonWrapper">
+        <v-btn variant="tonal" size="small" prepend-icon="mdi-home">
+          <router-link to="/">Home</router-link>
+        </v-btn>
+      </div>
+
       <div class="buttonWrapper">
         <v-btn variant="tonal" size="small">
           <router-link to="/browse">Browse</router-link>
@@ -19,16 +33,174 @@
       </div>
 
       <div class="buttonWrapper">
-        <v-btn variant="tonal" size="small" prepend-icon="mdi-home">
-          <router-link to="/">Home</router-link>
-        </v-btn>
+        <v-btn color="primary" variant="tonal" size="small" @click="toggleLoggedIn">{{ isLoggedIn ?
+          'logout' : 'login' }}</v-btn>
       </div>
+
     </nav>
+
+
   </v-app-bar>
+
+  <v-dialog v-model="loginDialog" width="50%">
+    <v-card>
+      <v-card-title>Log in to Poddle Account</v-card-title>
+      <form>
+        <v-text-field v-model="loginEmail" label="E-mail"></v-text-field>
+
+        <v-text-field v-model="loginPassword" label="Password"></v-text-field>
+
+        <v-btn class="me-4" @click="loginDialog = false">Cancel</v-btn>
+        <v-btn class="me-4" color="primary" @click="login">Login</v-btn>
+      </form>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup>
-  //
+import { ref } from 'vue'
+import { supabase } from '../../clients/supabase'
+import { storeToRefs } from 'pinia';
+import { useAppStore } from '@/store/app';
+import { onMounted } from 'vue'
+
+let loginDialog = ref(false)
+let loginEmail = ref("");
+let loginPassword = ref("");
+let isLoggedIn = ref("")
+
+const getSession = async () => {
+  const { data } = await supabase.auth.getSession()
+  if (data.session === null) {
+    isLoggedIn.value = false
+    console.log("logged out")
+  } else {
+    isLoggedIn.value = true
+    console.log("logged in")
+  }
+}
+getSession()
+
+const toggleLoggedIn = async () => {
+  if (isLoggedIn.value === true) {
+    // Logout
+    const { error } = await supabase.auth.signOut()
+    if (error) {
+      console.log(error)
+    } else {
+      console.log("Logout successful")
+      isLoggedIn.value = false
+      loginDialog.value = false
+      uploadLastPlayed()
+    }
+  }
+
+  if (isLoggedIn.value === false) {
+    // Login
+    loginDialog.value = true
+  }
+}
+
+const login = async () => {
+  loginDialog.value = false
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: loginEmail.value,
+    password: loginPassword.value
+  })
+  if (error) {
+    console.log(error)
+  } else {
+    console.log(data)
+    isLoggedIn.value = true
+    fetchLastPlayed()
+  }
+}
+
+// const logout = async () => {
+//   const { error } = await supabase.auth.signOut()
+//   if (error) {
+//     console.log(error)
+//   } else {
+//     console.log("Logout successful")
+//     uploadLastPlayed()
+//   }
+// }
+
+window.addEventListener("beforeunload", uploadLastPlayed)
+
+const { currentlyPlaying } = storeToRefs(useAppStore())
+
+async function uploadLastPlayed() {
+  const localUser = await supabase.auth.getSession();
+  if (localUser.data.session === null) {
+    return
+  } else {
+    const lastPlayed = currentlyPlaying.value
+    try {
+      const { data, error } = await supabase
+        .from('last_played_tracks')
+        .insert({
+          user_email: localUser.data.session.user.email,
+          time_added: new Date(),
+          showId: lastPlayed.showId,
+          show_title: lastPlayed.showTitle,
+          episode_title: lastPlayed.episodeTitle,
+          episode: lastPlayed.episode,
+          season: lastPlayed.season,
+          file: lastPlayed.file,
+          time_played: lastPlayed.timePlayed,
+        });
+      if (error) {
+        console.error('Error inserting data:', error.message);
+      } else {
+        console.log('Data inserted successfully:', data);
+      }
+    } catch (error) {
+      console.error('Error inserting data:', error.message);
+    }
+  }
+}
+
+async function fetchLastPlayed() {
+  const localUser = await supabase.auth.getSession();
+  if (localUser.data.session === null) {
+    return
+  } else {
+    const localUser = await supabase.auth.getSession()
+    const lastPlayed = currentlyPlaying.value
+    try {
+      const { data, error } = await supabase
+        .from('last_played_tracks')
+        .select('*')
+        .eq('user_email', localUser.data.session.user.email)
+        .order('time_added', { ascending: false })
+        .limit(1)
+      if (data.length > 0) {
+        lastPlayed.showId = data[0].showId
+        lastPlayed.showTitle = data[0].show_title
+        lastPlayed.episodeTitle = data[0].episode_title
+        lastPlayed.episode = data[0].episode
+        lastPlayed.season = data[0].season
+        lastPlayed.file = data[0].file
+        lastPlayed.timePlayed = data[0].time_played
+        // console.log('Data fetched successfully:', data)
+      } else if (error) {
+        console.error('Error fetching data:', error.message);
+        return
+      }
+      else {
+        console.log('No data for played tracks')
+        return
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error.message);
+    }
+  }
+}
+
+onMounted(() => {
+  fetchLastPlayed()
+})
 </script>
 
 <style scoped>
@@ -43,5 +215,16 @@ nav {
 a {
   text-decoration: none;
   color: white
+}
+
+.form {
+  display: flex;
+  justify-content: center;
+  width: 80%;
+  margin: 2rem;
+}
+
+.v-card {
+  padding: 3rem;
 }
 </style>

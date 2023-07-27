@@ -4,25 +4,9 @@
     <h2>Splash into a world of podcasts</h2>
     <br><br>
     <v-item-group>
-      <v-btn @click="loginDialog = true">Login</v-btn>
-      <v-btn variant="tonal" @click="signupDialog = true">Sign Up</v-btn>
-      <v-btn @click="logout">Logout</v-btn>
+      <v-btn @click="signupDialog = true">Sign Up</v-btn>
     </v-item-group>
   </div>
-
-  <v-dialog v-model="loginDialog" width="50%">
-    <v-card>
-      <v-card-title>Log in to Poddle Account</v-card-title>
-      <form>
-        <v-text-field v-model="loginEmail" label="E-mail"></v-text-field>
-
-        <v-text-field v-model="loginPassword" label="Password"></v-text-field>
-
-        <v-btn class="me-4" @click="loginDialog = false">Cancel</v-btn>
-        <v-btn class="me-4" color="primary" @click="login">Login</v-btn>
-      </form>
-    </v-card>
-  </v-dialog>
 
   <v-dialog v-model="signupDialog" width="50%">
     <v-card>
@@ -55,32 +39,6 @@ import { supabase } from '../clients/supabase'
 // import RecommendedCarousel from '@/components/RecommendedCarousel.vue';
 
 let signupDialog = ref(false)
-let loginDialog = ref(false)
-
-let loginEmail = ref("");
-let loginPassword = ref("");
-
-const login = async () => {
-  loginDialog.value = false
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email: loginEmail.value,
-    password: loginPassword.value
-  })
-  if (error) {
-    console.log(error)
-  } else {
-    console.log(data)
-  }
-}
-
-const logout = async () => {
-  const { error } = await supabase.auth.signOut()
-  if (error) {
-    console.log(error)
-  } else {
-    console.log("Logout successful")
-  }
-}
 
 const { handleSubmit } = useForm({
   validationSchema: {
