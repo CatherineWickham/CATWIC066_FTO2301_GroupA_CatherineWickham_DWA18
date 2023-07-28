@@ -262,14 +262,13 @@ onMounted(() => {
 
 <style scoped>
 .v-app-bar {
-  border-bottom: solid 0.9rem rgb(33, 33, 33);
-  height: 9vh;
+  border-bottom: solid 3px rgb(33, 33, 33);
+  height: 10vh;
   display: flex;
   align-items: center;
 }
 
 nav {
-  margin-top: 0.5rem;
   display: flex;
 }
 
@@ -305,7 +304,6 @@ a {
   display: flex;
   width: 160px;
   align-items: center;
-  margin-top: 0.5rem;
   margin-left: 1rem;
   margin-right: auto;
   font-size: 2rem;

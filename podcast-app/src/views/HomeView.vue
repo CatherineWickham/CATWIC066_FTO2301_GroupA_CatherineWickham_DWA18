@@ -9,7 +9,7 @@
 
     <br><br>
     <v-item-group>
-      <v-btn @click="signupDialog = true" size="large">Sign Up</v-btn>
+      <v-btn @click="signupDialog = true">Sign Up</v-btn>
     </v-item-group>
   </div>
 
