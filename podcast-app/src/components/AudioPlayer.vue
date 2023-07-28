@@ -11,17 +11,13 @@
 </template>
 
 <script setup>
-// import { ref } from 'vue'
-import { storeToRefs } from 'pinia';
+import { storeToRefs, } from 'pinia';
 import { useAppStore } from '@/store/app';
 import { supabase } from '@/clients/supabase';
 
 const { currentlyPlaying } = storeToRefs(useAppStore())
 
-// const startTime = currentlyPlaying.value.timePlayed
-
 let audioKey = 0
-// let isPlaying = ref(false)
 
 const setTimePlayed = (event) => {
   event.target.currentTime = currentlyPlaying.value.timePlayed
@@ -40,18 +36,6 @@ const getTimePlayed = async (event) => {
     .eq('season', currentlyPlaying.value.season)
     .eq('episode', currentlyPlaying.value.episode);
 }
-
-// const toggleIsPlaying = () => {
-//   isPlaying.value = !isPlaying.value
-// }
-
-// const alertStillPlaying = (event) => {
-//   event.preventdefault()
-//   event.returnValue = ""
-// }
-
-// window.addEventListener("beforeunload", alertStillPlaying)
-
 </script>
 
 <style scoped>

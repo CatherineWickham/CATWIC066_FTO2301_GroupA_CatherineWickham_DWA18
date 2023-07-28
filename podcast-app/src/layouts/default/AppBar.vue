@@ -60,7 +60,7 @@
 
         <v-text-field v-model="loginPassword" label="Password"></v-text-field>
 
-        <v-btn class="me-4" @click="loginDialog = false">Cancel</v-btn>
+        <v-btn class="me-4" @click="closeLogin">Cancel</v-btn>
         <v-btn class="me-4" color="primary" @click="login">Login</v-btn>
       </form>
     </v-card>
@@ -90,6 +90,12 @@ let loginEmail = ref("");
 let loginPassword = ref("");
 let isLoggedIn = ref("")
 let clearHistoryDialog = ref(false)
+
+const closeLogin = () => {
+  loginDialog.value = false
+  loginEmail.value = ""
+  loginPassword.value = ""
+}
 
 const clearHistory = async () => {
   clearHistoryDialog.value = false
