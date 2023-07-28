@@ -10,11 +10,11 @@
       :description="preview.item.description" :image="preview.item.image" :genres="preview.item.genres"
       :updated="preview.item.updated">
     </PreviewCard>
-
   </v-container>
   <v-container v-else class="loadingContainer">
     <LoadingIndicator />
   </v-container>
+  <div class="bottomSpacer"></div>
 </template>
 
 <script setup>
@@ -155,5 +155,9 @@ const sortedPreviewData = computed(() => {
   top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.bottomSpacer {
+  height: 20vh;
 }
 </style>

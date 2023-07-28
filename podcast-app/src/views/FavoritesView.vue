@@ -1,6 +1,7 @@
 <template>
+  <FavoritesToolbar class="toolbar" @filtersApplied="handlefiltersApplied" />
   <v-container fluid class="fill-height" v-if="favoritesDataReady">
-    <FavoritesList :favoritesData="favoritesData"></FavoritesList>
+    <FavoritesList :sortedFavoritesData="sortedFavoritesData"></FavoritesList>
     <div class="bottomSpacer"></div>
   </v-container>
   <v-container v-else class="loadingContainer">
@@ -9,10 +10,11 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import FavoritesList from '@/components/FavoritesList.vue'
 import { supabase } from '@/clients/supabase';
 import LoadingIndicator from '@/components/LoadingIndicator.vue'
+import FavoritesToolbar from '@/components/FavoritesToolbar.vue'
 
 let favoritesDataReady = ref(false) // remember to change back to false default
 
@@ -44,7 +46,7 @@ const fetchFavoritesData = async () => {
         isFavorite: true,
       })
     }
-    favoritesData = favoritesArray
+    favoritesData.value = favoritesArray
     favoritesDataReady.value = true
   } catch (error) {
     console.error(error);
@@ -52,6 +54,58 @@ const fetchFavoritesData = async () => {
 };
 
 fetchFavoritesData()
+
+let sortMethod = ref("Unsorted")
+
+const handlefiltersApplied = (filters) => {
+  const { sortType } = filters
+  sortMethod.value = sortType
+}
+
+const sortedFavoritesData = computed(() => {
+  let sortedFavorites = [...favoritesData.value];
+
+  if (sortMethod.value === "Alphabetical (A to Z)") {
+    sortedFavorites.sort((a, b) => {
+      let fa = a.showTitle.toLowerCase();
+      let fb = b.showTitle.toLowerCase();
+      if (fa < fb) {
+        return -1;
+      } else if (fa > fb) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+  }
+  else if (sortMethod.value === "Alphabetical (Z to A)") {
+    sortedFavorites.sort((a, b) => {
+      let fa = a.showTitle.toLowerCase();
+      let fb = b.showTitle.toLowerCase();
+      if (fa > fb) {
+        return -1;
+      } else if (fa < fb) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+  }
+
+  else if (sortMethod.value === "By earliest date updated") {
+    sortedFavorites.sort((a, b) => (new Date(b.lastUpdated
+    )).getTime() - (new Date(a.lastUpdated
+    )).getTime());
+  }
+  else if (sortMethod.value === "By latest date updated") {
+    sortedFavorites.sort((a, b) => (new Date(a.lastUpdated
+    )).getTime() - (new Date(b.lastUpdated
+    )).getTime());
+  }
+
+  return sortedFavorites;
+}
+);
 
 </script>
 

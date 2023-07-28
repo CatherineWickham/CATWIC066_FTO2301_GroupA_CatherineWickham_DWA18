@@ -2,6 +2,7 @@
   <v-container v-if="showDataReady" class="fill-height">
     <ShowHero @seasonSelected="handleSeasonSelect" :showData="showData"></ShowHero>
     <ShowEpisodesList :showData="showData" :seasonFilter="seasonFilter"></ShowEpisodesList>
+    <div class="bottomSpacer"></div>
   </v-container>
   <v-container v-else class="loadingContainer">
     <LoadingIndicator />
@@ -119,5 +120,9 @@ const handleSeasonSelect = (season) => {
   top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.bottomSpacer {
+  height: 20vh;
 }
 </style>
