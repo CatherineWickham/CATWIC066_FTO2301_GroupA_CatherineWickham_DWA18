@@ -70,13 +70,15 @@ const handlefiltersApplied = (filters) => {
   const { sortType, filterString, selectedGenre } = filters
   if (selectedGenre === "All Genres") {
     genreFilter.value = null
+    sortMethod.value = sortType
+    textFilter.value = filterString
     return
   } else {
     const genreKey = Object.keys(GENRE_MAP).find(key => GENRE_MAP[key] === selectedGenre);
     genreFilter.value = parseInt(genreKey)
+    sortMethod.value = sortType
+    textFilter.value = filterString
   }
-  sortMethod.value = sortType
-  textFilter.value = filterString
 }
 
 const handleGenreSelected = (genreKey) => {
@@ -120,6 +122,11 @@ const sortedPreviewData = computed(() => {
     sortedPreviews.sort((a, b) => (new Date(a.updated)).getTime() - (new Date(b.updated)).getTime());
   }
 
+  if (genreFilter.value !== null) {
+    const genreFiltered = sortedPreviews.filter((preview) => preview.genres.includes(genreFilter.value))
+    sortedPreviews = genreFiltered
+  }
+
   // Fuse.js fuzzy matching
   const options = computed(() => ({
     fuseOptions: {
@@ -129,11 +136,6 @@ const sortedPreviewData = computed(() => {
     },
     matchAllWhenSearchEmpty: true,
   }))
-
-  if (genreFilter.value !== null) {
-    const genreFiltered = sortedPreviews.filter((preview) => preview.genres.includes(genreFilter.value))
-    sortedPreviews = genreFiltered
-  }
 
   const { results } = useFuse(textFilter, sortedPreviews, options)
   if (results && results.value && results.value.length > 0) {
