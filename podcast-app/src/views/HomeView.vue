@@ -6,7 +6,6 @@
       <p>Dive into a unique audio experience with Poddle, the revolutionary podcast app
         that's all about making a splash </p>
     </div>
-
     <br><br>
     <v-item-group>
       <v-btn @click="signupDialog = true">Sign Up</v-btn>
@@ -125,6 +124,7 @@ h1 {
   margin: 1.2rem;
   padding: 0;
   font-family: Raleway;
+  text-align: center;
 }
 
 main {
@@ -137,9 +137,9 @@ main {
 }
 
 .blurb {
-  width: 35%;
+  width: 40%;
   text-align: center;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 600;
   font-family: Raleway;
 }

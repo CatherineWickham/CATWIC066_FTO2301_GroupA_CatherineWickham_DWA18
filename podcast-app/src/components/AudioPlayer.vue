@@ -39,6 +39,10 @@ const getTimePlayed = async (event) => {
 </script>
 
 <style scoped>
+.v-sheet {
+  background-color: rgb(18, 18, 18);
+}
+
 .audioContainer {
   width: 100%;
   display: flex;
