@@ -8,24 +8,32 @@
 
     <v-list max-width>
       <v-list-item v-for="episode in season.episodes" :key="episode.episode">
-        <v-list-item-title>
-          <v-icon @click="toggleFavorite(season, episode)" v-if="episode.isFavorite" icon='mdi-heart'
-            :key="filledHeartKey" />
-          <v-icon @click="toggleFavorite(season, episode)" v-else icon='mdi-heart-outline' :key="emptyHeartKey" />
-          <v-chip class="episodeChip">EPISODE {{ episode.episode }}</v-chip>
-          {{ episode.title }}
-        </v-list-item-title>
-        <v-list-item-subtitle>
-          <div class="episodePanel">
-            <div>
-              {{ episode.description }}
+        <div class="episode">
+
+          <div class="buttonArea">
+            <v-btn icon="mdi-play" size="large" color="green" @click="episodeSelectedHandler(season, episode)"
+              :data-episode="[episode.episode]" :data-season="[season.season]"></v-btn>
+          </div>
+
+          <div class="textArea">
+            <div class="textHeader">
+              <v-list-item-title>
+                <v-icon class="heart" @click="toggleFavorite(season, episode)" v-if="episode.isFavorite" icon='mdi-heart'
+                  :key="filledHeartKey" />
+                <v-icon class="heart" @click="toggleFavorite(season, episode)" v-else icon='mdi-heart-outline'
+                  :key="emptyHeartKey" />
+                {{ episode.title }}
+                <v-chip class="episodeChip">EPISODE {{ episode.episode }}</v-chip>
+              </v-list-item-title>
             </div>
-            <div class="episodePanelButton">
-              <v-btn icon="mdi-play" size="large" color="green" @click="episodeSelectedHandler(season, episode)"
-                :data-episode="[episode.episode]" :data-season="[season.season]"></v-btn>
+            <div class="textBody">
+              <v-list-item-subtitle>
+                {{ episode.description }}
+              </v-list-item-subtitle>
             </div>
           </div>
-        </v-list-item-subtitle>
+
+        </div>
         <v-divider></v-divider>
       </v-list-item>
     </v-list>
@@ -166,12 +174,17 @@ const filteredShowData = computed(() => {
 
 <style scoped>
 .v-card-subtitle {
+  margin-top: 1rem;
   margin-bottom: 0.8rem;
 }
 
 .seasonContainer {
   display: flex;
   margin: 2rem;
+}
+
+.v-list {
+  width: 100%;
 }
 
 img {
@@ -186,16 +199,39 @@ img {
 }
 
 .episodeChip {
-  margin-left: 2rem;
-  margin-right: 2rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
-.episodePanel {
+.episode {
   display: flex;
   align-items: center;
+  height: 15vh;
 }
 
-.episodePanelButton {
-  margin-left: 24px;
+.buttonArea {
+  width: 10%;
+  display: flex;
+  justify-content: center;
+}
+
+.textArea {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  margin-left: 1rem;
+}
+
+.textHeader {
+  margin-top: 1%;
+}
+
+.textBody {
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+
+.heart {
+  margin-right: 0.6rem;
 }
 </style>

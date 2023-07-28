@@ -14,7 +14,7 @@
       </div>
 
       <div class="buttonWrapper">
-        <v-btn variant="tonal" size="small">
+        <v-btn variant="tonal" size="small" prepend-icon="mdi-playlist-music">
           <router-link to="/browse">Browse</router-link>
         </v-btn>
       </div>

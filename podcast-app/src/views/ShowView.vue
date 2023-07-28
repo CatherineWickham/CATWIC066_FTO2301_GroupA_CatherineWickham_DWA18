@@ -1,4 +1,6 @@
 <template>
+  <v-btn class="backButton" variant="tonal" append-icon="mdi-arrow-u-left-bottom"><router-link to="/browse">Back to
+      Browse</router-link></v-btn>
   <v-container v-if="showDataReady" class="fill-height">
     <ShowHero @seasonSelected="handleSeasonSelect" :showData="showData"></ShowHero>
     <ShowEpisodesList :showData="showData" :seasonFilter="seasonFilter"></ShowEpisodesList>
@@ -124,5 +126,17 @@ const handleSeasonSelect = (season) => {
 
 .bottomSpacer {
   height: 20vh;
+}
+
+a {
+  text-decoration: none;
+  color: white
+}
+
+.backButton {
+  margin-top: 2rem;
+  margin-left: 2rem;
+  margin-bottom: 0;
+  position: absolute;
 }
 </style>

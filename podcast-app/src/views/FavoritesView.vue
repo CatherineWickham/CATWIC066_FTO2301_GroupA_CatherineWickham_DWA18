@@ -1,5 +1,7 @@
 <template>
   <FavoritesToolbar class="toolbar" @filtersApplied="handlefiltersApplied" />
+  <v-btn class="backButton" variant="tonal" append-icon="mdi-arrow-u-left-bottom"><router-link to="/browse">Back to
+      Browse</router-link></v-btn>
   <v-container fluid class="fill-height" v-if="favoritesDataReady">
     <FavoritesList :sortedFavoritesData="sortedFavoritesData"></FavoritesList>
     <div class="bottomSpacer"></div>
@@ -116,5 +118,15 @@ const sortedFavoritesData = computed(() => {
 
 .bottomSpacer {
   height: 20vh;
+}
+
+a {
+  text-decoration: none;
+  color: white
+}
+
+.backButton {
+  margin-top: 2rem;
+  margin-left: 2rem;
 }
 </style>

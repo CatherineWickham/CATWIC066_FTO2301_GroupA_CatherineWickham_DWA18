@@ -43,8 +43,6 @@ import { storeToRefs } from 'pinia';
 import { useAppStore } from '@/store/app';
 import { supabase } from '@/clients/supabase';
 
-// import { useFuse } from '@vueuse/integrations/useFuse'
-
 const props = defineProps(['sortedFavoritesData'])
 
 const { currentlyPlaying } = storeToRefs(useAppStore())
