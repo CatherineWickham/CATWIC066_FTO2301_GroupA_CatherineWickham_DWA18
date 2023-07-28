@@ -1,6 +1,6 @@
 <template>
     <v-card>
-        <v-progress-circular :size="70" :width="7" color="green" indeterminate></v-progress-circular>
+        <v-progress-circular :size="70" :width="7" color="purple" indeterminate></v-progress-circular>
         <br><br>
         <v-card-title>Page Loading</v-card-title>
         <v-card-subtitle>If the content does not load within a few

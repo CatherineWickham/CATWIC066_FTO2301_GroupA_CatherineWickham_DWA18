@@ -48,6 +48,7 @@ const handleFiltersSubmit = (event) => {
 
 <style scoped>
 .v-toolbar {
+  background-color: rgb(18, 18, 18);
   margin-top: 1rem;
 }
 

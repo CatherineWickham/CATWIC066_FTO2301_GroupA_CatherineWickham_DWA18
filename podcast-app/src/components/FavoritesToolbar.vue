@@ -1,11 +1,12 @@
 <template>
   <v-toolbar>
-    <v-toolbar-title class="toolbarTitle">My Favorites</v-toolbar-title>
+    <v-spacer></v-spacer>
     <v-form @submit="handleFiltersSubmit">
       <v-select class="formItem" v-model="selectedSortType" label="Sort By" :items="sortTypesArray">
       </v-select>
       <v-btn class="formItem" type="submit" variant="outlined">Apply Filters</v-btn>
     </v-form>
+    <v-spacer></v-spacer>
   </v-toolbar>
 </template>
 
@@ -29,22 +30,26 @@ const handleFiltersSubmit = (event) => {
 
 <style scoped>
 .v-toolbar {
-  margin-top: 1rem;
+  background-color: rgb(18, 18, 18);
+  margin-top: 3rem;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
 }
 
 .v-form {
   display: flex;
-  width: 80%;
+  width: 60%;
   align-items: center;
 }
 
 .formItem {
   margin: 0 1rem;
-  width: 30%;
+  width: 50%;
 }
 
 .formInputs {
   margin: 0 1rem;
-  width: 30%;
+  width: 10%;
 }
 </style>

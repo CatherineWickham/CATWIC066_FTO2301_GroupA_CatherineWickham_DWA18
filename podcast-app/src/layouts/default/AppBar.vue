@@ -1,26 +1,27 @@
 <template>
-  <v-app-bar flat>
+  <v-app-bar flat
+    image="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80">
     <div class="logo">
-      <v-img class="logoImage" src="../../assets/poddle_logo_fuzzy.png" height="40" />
+      <v-img class="logoImage" src="../../assets/poddle_logo_black.png" height="40" />
       <p class="logoText">poddle</p>
     </div>
 
     <nav>
 
       <div class="buttonWrapper">
-        <v-btn variant="tonal" size="small" prepend-icon="mdi-home">
+        <v-btn variant="elevated" color="black" size="small" prepend-icon="mdi-home">
           <router-link to="/">Home</router-link>
         </v-btn>
       </div>
 
       <div class="buttonWrapper">
-        <v-btn variant="tonal" size="small" prepend-icon="mdi-playlist-music">
+        <v-btn variant="elevated" color="black" size="small" prepend-icon="mdi-playlist-music">
           <router-link to="/browse">Browse</router-link>
         </v-btn>
       </div>
 
       <div class="buttonWrapper">
-        <v-btn variant="tonal" size="small" prepend-icon="mdi-account">
+        <v-btn variant="elevated" color="black" size="small" prepend-icon="mdi-account">
           My Account
 
           <v-menu activator="parent">
@@ -42,11 +43,11 @@
       </div>
 
       <div v-if="isLoggedIn" class="buttonWrapper">
-        <v-btn color="primary" variant="tonal" size="small" @click="toggleLoggedIn"><router-link
+        <v-btn color="purple" variant="elevated" size="small" @click="toggleLoggedIn"><router-link
             to="/">Logout</router-link></v-btn>
       </div>
       <div v-else class="buttonWrapper">
-        <v-btn color="primary" variant="tonal" size="small" @click="toggleLoggedIn">Login</v-btn>
+        <v-btn color="purple" variant="elevated" size="small" @click="toggleLoggedIn">Login</v-btn>
       </div>
     </nav>
 
@@ -260,7 +261,15 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.v-app-bar {
+  border-bottom: solid 0.9rem rgb(33, 33, 33);
+  height: 9vh;
+  display: flex;
+  align-items: center;
+}
+
 nav {
+  margin-top: 0.5rem;
   display: flex;
 }
 
@@ -294,15 +303,15 @@ a {
 
 .logo {
   display: flex;
-  width: 130px;
+  width: 160px;
   align-items: center;
+  margin-top: 0.5rem;
   margin-left: 1rem;
   margin-right: auto;
-  font-size: 1.7rem;
-}
-
-.logoText {
-  margin-top: 0.2rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: black;
+  font-family: Raleway;
 }
 
 .logoImage {

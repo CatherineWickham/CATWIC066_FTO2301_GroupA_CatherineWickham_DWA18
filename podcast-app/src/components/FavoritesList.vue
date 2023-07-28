@@ -5,33 +5,40 @@
         <v-img :src="favorite.image" width="200" cover></v-img>
       </div>
       <div class="favInfo">
-        <v-card-title>
-          {{ favorite.episodeTitle }}
-        </v-card-title>
-        <v-card-subtitle>
-          {{ favorite.showTitle + ' - Season ' + favorite.season }}
+
+        <div class="text">
+          <v-card-title>
+            {{ favorite.showTitle + ' - Season ' + favorite.season }}
+          </v-card-title>
+          <v-card-subtitle>
+            {{ favorite.episodeTitle + ' - Episode ' + favorite.episode }}
+          </v-card-subtitle>
+          <v-card-text>{{ favorite.episodeDescription }}</v-card-text>
           <v-chip>
             LAST UPDATED:
             {{ (new Date(favorite.lastUpdated)).getDate().toString().padStart(2, '0') }}/
             {{ ((new Date(favorite.lastUpdated)).getMonth() + 1).toString().padStart(2, '0') }}/
             {{ (new Date(favorite.lastUpdated)).getFullYear() }}
           </v-chip>
-        </v-card-subtitle>
-        <v-card-text>{{ favorite.episodeDescription }}</v-card-text>
-        <v-btn icon="mdi-play" size="large" color="green" @click="episodeSelectedHandler(favorite)"
-          :data-key="favorite.id"></v-btn>
-        <v-btn icon='mdi-close' variant="tonal" size="large" @click="removeFavorite(favorite)"
-          :data-key="favorite.id"></v-btn>
-        <v-chip>
-          ADDED TO FAVORITES:
-          {{ (new Date(favorite.dateAdded)).getDate().toString().padStart(2, '0') }}/
-          {{ ((new Date(favorite.dateAdded)).getMonth() + 1).toString().padStart(2, '0') }}/
-          {{ (new Date(favorite.dateAdded)).getFullYear() }}
-          {{ (new Date(favorite.dateAdded)).getHours() }}:{{ (new Date(favorite.dateAdded)).getMinutes() }}
-        </v-chip>
+          <v-chip>
+            ADDED TO FAVORITES:
+            {{ (new Date(favorite.dateAdded)).getDate().toString().padStart(2, '0') }}/
+            {{ ((new Date(favorite.dateAdded)).getMonth() + 1).toString().padStart(2, '0') }}/
+            {{ (new Date(favorite.dateAdded)).getFullYear() }}
+            {{ (new Date(favorite.dateAdded)).getHours() }}:{{ (new Date(favorite.dateAdded)).getMinutes() }}
+          </v-chip>
+        </div>
+
+        <div class="actions">
+          <v-btn class="actionButton" icon="mdi-play" size="large" color="purple" variant="outlined"
+            @click="episodeSelectedHandler(favorite)" :data-key="favorite.id"></v-btn>
+          <v-btn class="actionButton" icon='mdi-close' variant="tonal" size="large" @click="removeFavorite(favorite)"
+            :data-key="favorite.id"></v-btn>
+        </div>
+
       </div>
     </div>
-    <div v-else>Favorite removed</div>
+    <div class="removed" v-else>Favorite removed</div>
   </v-card>
 </template>
 
@@ -87,7 +94,11 @@ const episodeSelectedHandler = (favorite) => {
 
 <style scoped>
 .v-card {
-  margin: 1rem;
+  margin: 0 1rem;
+}
+
+.v-chip {
+  margin-left: 1rem;
 }
 
 .favContainer {
@@ -95,11 +106,31 @@ const episodeSelectedHandler = (favorite) => {
 }
 
 .favImage {
-  flex: 1;
+  width: 10%;
   margin: 1rem;
 }
 
 .favInfo {
-  flex: 5
+  width: 90%;
+  display: flex;
+}
+
+.actions {
+  margin-left: auto;
+  display: flex;
+}
+
+.text {
+  margin: 1rem;
+}
+
+.actionButton {
+  margin-top: 0.8rem;
+  margin-bottom: 0.8rem;
+  margin-right: 0.8rem;
+}
+
+.removed {
+  padding: 2rem;
 }
 </style>

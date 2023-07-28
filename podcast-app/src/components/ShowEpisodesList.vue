@@ -11,8 +11,9 @@
         <div class="episode">
 
           <div class="buttonArea">
-            <v-btn icon="mdi-play" size="large" color="green" @click="episodeSelectedHandler(season, episode)"
-              :data-episode="[episode.episode]" :data-season="[season.season]"></v-btn>
+            <v-btn icon="mdi-play" size="large" color="purple" variant="outlined"
+              @click="episodeSelectedHandler(season, episode)" :data-episode="[episode.episode]"
+              :data-season="[season.season]"></v-btn>
           </div>
 
           <div class="textArea">

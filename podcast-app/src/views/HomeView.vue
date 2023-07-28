@@ -2,10 +2,14 @@
   <div class="welcomeBanner">
     <img cover class="blackLogo" src="../assets/poddle_logo_black.png" />
     <h1>Welcome to Poddle!</h1>
-    <h2>Splash into a world of podcasts</h2>
+    <div class="blurb">
+      <p>Dive into a unique audio experience with Poddle, the revolutionary podcast app
+        that's all about making a splash </p>
+    </div>
+
     <br><br>
     <v-item-group>
-      <v-btn @click="signupDialog = true">Sign Up</v-btn>
+      <v-btn @click="signupDialog = true" size="large">Sign Up</v-btn>
     </v-item-group>
   </div>
 
@@ -111,7 +115,7 @@ const submit = handleSubmit(async (values) => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 90vh;
   color: black;
 }
 
@@ -120,6 +124,7 @@ h1 {
   font-weight: 900;
   margin: 1.2rem;
   padding: 0;
+  font-family: Raleway;
 }
 
 main {
@@ -129,5 +134,13 @@ main {
 .blackLogo {
   height: 30%;
   width: auto;
+}
+
+.blurb {
+  width: 35%;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 600;
+  font-family: Raleway;
 }
 </style>
