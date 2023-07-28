@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Poddle</title>
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/apple-touch-icon-6e23b752.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAHdElNRQfnBxwGIxYhigsvAAADt0lEQVRIx3XVWWyUZRQG4Of/Z1oEWhoICA0IhKYq0FTCItALoGrB4HID3BiFIgYSAokJGq/EoAmJLAkkoqhIsKJRoywRFQhC3VIgCCpClO1CitNWihRoCnTa8eLvMjOFMzeT7z/ve7b3O18gyxLEFHlEuVKF8gSaJZxU7aAzkoVZ/kEP8DiVZhsunuXZptZe2xzLJAnSwAyxzAsGu7td9qENainMJEjAeOvMyMzpjlZjhZpOiqALPs1mo7PrC5CSyqa4YKl9EUXQFX17JjwldMUlDDVAe3ZiF8z3M4VCUe3rsqPHnLLQXHNV+kMsO4dR1hkOYYLQMuXZHik7HdGkyVE7ehbBFCvEE0KMt6jn93Z1Xf/rtAnExEinelYZodB8Q9IjB2JCgXu6zvqKuepLB7Sm92KAhXJCxWZntq7eV06Lub/jLDRBzLuWWuxQZjcqlMSVG5E+uJtW2aFYlQnyXccIZZIuSrmRVhYoNDNuRqZoW5zFJXVKFDuOx9wnsEiLgWZpT3cOlceVZpIWWOwjE5XoZ7Lj8swW06bIevli2YoYGySuKshsIS16C+T4RqWxPtffJS8abWWHbNKsNZSXCQ/FNPtCg28NNVgvvaR84KyJcoSZgyQnzIQHzjjhsLX+ttk1I5y0wRp/eUerTc4hzKCIa9avc4DXVdliugpXNJojX46bNsq1RYOVLttqgQXyuzuRDKO7RKDZG1ar198D+tkg109+72h2H+Nt9KSE1Va50d3IhthLM4yBmJ3WS1ponpSkPfb6XgtoM90xxyyR6xenjVTaWcaRULW2yKlGq4HmWus181RIdc085ZabtltjjkGSaiIIKdVxB100kkABWt0yTJX3veJxP7ikTX+TPWQXCrVoRUFnI+vsDxIxmywhdMwidWZ62W92YZpSfaS0+schjZ4yzlr7DbbFw1F2n3g+SDDVboNgj9dd9KBnTPK1t+R61BNCvQ0Qd9zH/jTMq56OCmgy14EgQcybVkQqOGWbfRoMEGjEJBWa1bvgrP8MMtNCJVKRYt+z3O1oJw7zmbJIh0nnHXbUOY2a3dYuro97FZtkqiI52iP4CfOc716qZaoUdYo5kHRDkxtuoZc8BfrKkeoEU6vSdxSmrfVZ3jYq/UoFXXKJFnuqWz61ltsVrfUw2gvYZ74jnaqMYO0dv1TaKX5VaXfGw9KVxXArPKe/u9s1n1rjfI+nrYskxxSLVBjS4+qn1Dtoqx/dvuPjmpZHrjFmKVdisDiS/nVKtX1OutUdO7L/AaJSN2FQMTiqAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIzLTA3LTI4VDA2OjM1OjIyKzAwOjAw0mErvQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMy0wNy0yOFQwNjozNToyMiswMDowMKM8kwEAAABXelRYdFJhdyBwcm9maWxlIHR5cGUgaXB0YwAAeJzj8gwIcVYoKMpPy8xJ5VIAAyMLLmMLEyMTS5MUAxMgRIA0w2QDI7NUIMvY1MjEzMQcxAfLgEigSi4A6hcRdPJCNZUAAAAASUVORK5CYII="
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAHdElNRQfnBxwGIxW4g1qVAAABbElEQVQoz0XRO2iTYQBG4ef782MkGLUtNU2Kg9QLpJuKHbReQFHoIg5eUGsXu9rBpVAcFJwFF3GyiuAsqGQQl1LQqVJBGo2DqYnWC6EVI4j5HDI4n3c4vCdAk6xDLjloAF/MmfXC7yJCEwqmjceeICCKQstDNzW6g4I7TkJHE0UJ8MSkRmKd6S5OvHbWGQtSQWTMjGzqiItEiYxlNcGyfolBOOdZYlwvGa9cl5PXZ6trbomw2URqFIIVi04ZMqjstILQ9difKkZBdMJ2OcO2eavqqERHFLaE5h9p8MZLDSWfVBw2oOGCYZGY+By8N2VJ3mPP1bRssmLKOwlfE3OJqh8KGoakdur11C7fVQXmUw86x3f3lC3YoW7EXquyFpXt0Vk1m7n6MZby+0a1fbCkZk1d24grCjr3w+3QFEvuJmPBLy0//bVBn5yoU3E51LuxSmact/F/LGseuaGu+0eT9Y6ZcEA/vpl3T0Wbon/n9HVOrU93mAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMy0wNy0yOFQwNjozNToyMSswMDowMOOJMSAAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjMtMDctMjhUMDY6MzU6MjErMDA6MDCS1ImcAAAAV3pUWHRSYXcgcHJvZmlsZSB0eXBlIGlwdGMAAHic4/IMCHFWKCjKT8vMSeVSAAMjCy5jCxMjE0uTFAMTIESANMNkAyOzVCDL2NTIxMzEHMQHy4BIoEouAOoXEXTyQjWVAAAAAElFTkSuQmCC"
+    />
+    <link rel="manifest" href="data:application/manifest+json;base64,ewogICAgIm5hbWUiOiAiIiwKICAgICJzaG9ydF9uYW1lIjogIiIsCiAgICAiaWNvbnMiOiBbCiAgICAgICAgewogICAgICAgICAgICAic3JjIjogIi9hc3NldHMvYW5kcm9pZC1jaHJvbWUtMTkyeDE5Mi5wbmciLAogICAgICAgICAgICAic2l6ZXMiOiAiMTkyeDE5MiIsCiAgICAgICAgICAgICJ0eXBlIjogImltYWdlL3BuZyIKICAgICAgICB9LAogICAgICAgIHsKICAgICAgICAgICAgInNyYyI6ICIvYXNzZXRzL2FuZHJvaWQtY2hyb21lLTUxMng1MTIucG5nIiwKICAgICAgICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAgICAgICAidHlwZSI6ICJpbWFnZS9wbmciCiAgICAgICAgfQogICAgXSwKICAgICJ0aGVtZV9jb2xvciI6ICIjZmZmZmZmIiwKICAgICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNmZmZmZmYiLAogICAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIKfQo=" />
+    <link
+      rel="mask-icon"
+      href="/assets/safari-pinned-tab-e04abbf8.svg"
+      color="#5bbad5"
+    />
+    <link rel="shortcut icon" href="/assets/favicon-acb37f8a.ico" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta name="msapplication-config" content="/src/assets/browserconfig.xml" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module" crossorigin src="/assets/index-60f7ff30.js"></script>
+    <link rel="stylesheet" href="/assets/index-fa54c5da.css">
+  </head>
+
+  <body>
+    <div id="app"></div>
+    
+  </body>
+</html>
