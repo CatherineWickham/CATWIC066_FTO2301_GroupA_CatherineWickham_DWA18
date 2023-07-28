@@ -15,17 +15,6 @@ const routes = [
     ],
   },
   {
-    path: "/signup",
-    component: () => import("@/layouts/default/DefaultLayout.vue"),
-    children: [
-      {
-        path: "",
-        name: "SignUp",
-        component: () => import("@/views/SignupView.vue"),
-      },
-    ],
-  },
-  {
     path: "/browse",
     component: () => import("@/layouts/default/DefaultLayout.vue"),
     children: [
@@ -33,17 +22,6 @@ const routes = [
         path: "",
         name: "Browse",
         component: () => import("@/views/BrowseView.vue"),
-      },
-    ],
-  },
-  {
-    path: "/season",
-    component: () => import("@/layouts/default/DefaultLayout.vue"),
-    children: [
-      {
-        path: "",
-        name: "Season",
-        component: () => import("@/views/SeasonView.vue"),
       },
     ],
   },
