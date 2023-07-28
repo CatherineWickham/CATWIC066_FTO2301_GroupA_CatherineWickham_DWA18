@@ -1,9 +1,10 @@
 <template>
   <v-app-bar flat>
-    <v-app-bar-title>
-      <v-icon icon="mdi-gentoo" />
-      Poddle
-    </v-app-bar-title>
+    <div class="logo">
+      <v-img class="logoImage" src="../../assets/poddle_logo_fuzzy.png" height="40" />
+      <p class="logoText">poddle</p>
+    </div>
+
     <nav>
 
       <div class="buttonWrapper">
@@ -283,5 +284,23 @@ a {
 
 .dialogButton {
   margin: 0.4rem;
+}
+
+.logo {
+  display: flex;
+  width: 130px;
+  align-items: center;
+  margin-left: 1rem;
+  margin-right: auto;
+  font-size: 1.7rem;
+}
+
+.logoText {
+  margin-top: 0.2rem;
+}
+
+.logoImage {
+  margin-bottom: 0.2rem;
+  font-family: Raleway, sans-serif;
 }
 </style>

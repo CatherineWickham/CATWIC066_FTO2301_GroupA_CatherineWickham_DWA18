@@ -1,5 +1,6 @@
 <template>
   <div class="welcomeBanner">
+    <img cover class="blackLogo" src="../assets/poddle_logo_black.png" />
     <h1>Welcome to Poddle!</h1>
     <h2>Splash into a world of podcasts</h2>
     <br><br>
@@ -104,6 +105,7 @@ const submit = handleSubmit(async (values) => {
   background-image: url("https://images.unsplash.com/photo-1550684848-fac1c5b4e853?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80");
   background-size: cover;
   padding: 10rem;
+  padding-top: 2rem;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -122,5 +124,10 @@ h1 {
 
 main {
   --v-layout-top: 0px;
+}
+
+.blackLogo {
+  height: 30%;
+  width: auto;
 }
 </style>
