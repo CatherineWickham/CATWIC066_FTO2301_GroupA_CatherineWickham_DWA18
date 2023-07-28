@@ -92,12 +92,12 @@ const sortedFavoritesData = computed(() => {
     });
   }
 
-  else if (sortMethod.value === "By earliest date updated") {
+  else if (sortMethod.value === "Date updated (latest first)") {
     sortedFavorites.sort((a, b) => (new Date(b.lastUpdated
     )).getTime() - (new Date(a.lastUpdated
     )).getTime());
   }
-  else if (sortMethod.value === "By latest date updated") {
+  else if (sortMethod.value === "Date updated (earliest first)") {
     sortedFavorites.sort((a, b) => (new Date(a.lastUpdated
     )).getTime() - (new Date(b.lastUpdated
     )).getTime());

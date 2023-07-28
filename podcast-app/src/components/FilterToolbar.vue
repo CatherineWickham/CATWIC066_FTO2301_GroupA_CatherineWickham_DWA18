@@ -27,7 +27,7 @@ let genresArray = [
   "Kids and Family",
 ]
 
-let sortTypesArray = ["Unsorted", "Alphabetical (A to Z)", "Alphabetical (Z to A)", "By earliest date updated", "By latest date updated"]
+let sortTypesArray = ["Unsorted", "Alphabetical (A to Z)", "Alphabetical (Z to A)", "Date updated (earliest first)", "Date updated (latest first)"]
 let selectedSortType = ref("Unsorted")
 let filterString = ref("")
 let selectedGenre = ref("All Genres")

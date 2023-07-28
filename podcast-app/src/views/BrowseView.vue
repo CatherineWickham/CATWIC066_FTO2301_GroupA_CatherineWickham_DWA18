@@ -115,10 +115,10 @@ const sortedPreviewData = computed(() => {
     });
   }
 
-  else if (sortMethod.value === "By earliest date updated") {
+  else if (sortMethod.value === "Date updated (latest first)") {
     sortedPreviews.sort((a, b) => (new Date(b.updated)).getTime() - (new Date(a.updated)).getTime());
   }
-  else if (sortMethod.value === "By latest date updated") {
+  else if (sortMethod.value === "Date updated (earliest first)") {
     sortedPreviews.sort((a, b) => (new Date(a.updated)).getTime() - (new Date(b.updated)).getTime());
   }
 
